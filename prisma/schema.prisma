@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  nome         String
+  email        String        @unique
+  senha        String
+  telefone     String
+  imagemUrl    String?
+  admin        Boolean       @default(false)
+  cliente      Cliente?
+  profissional Profissional?
+}
+
+model Cliente {
+  id           String        @id @default(uuid())
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+  agendamentos Agendamento[]
+}
+
+model Profissional {
+  id                 String        @id @default(uuid())
+  bio                String?
+  userId             String        @unique
+  user               User          @relation(fields: [userId], references: [id])
+  agendamentos       Agendamento[]
+}
+
+model Servico {
+  id           String        @id @default(uuid())
+  nome         String
+  descricao    String
+  preco Decimal 
+  duracaoMin   Int
+  agendamentos Agendamento[]
+}
+
+enum StatusAgendamento {
+  AGENDADO
+  CONCLUIDO
+  CANCELADO
+  FALTOU
+}
+
+model Agendamento {
+  id             String       @id @default(uuid())
+  dataHora       DateTime
+  status   StatusAgendamento @default(AGENDADO)
+  profissionalId String
+  profissional   Profissional @relation(fields: [profissionalId], references: [id])
+  clienteId      String
+  cliente        Cliente      @relation(fields: [clienteId], references: [id])
+  servicoId      String
+  servico        Servico      @relation(fields: [servicoId], references: [id])
+}

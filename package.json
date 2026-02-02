@@ -1,0 +1,25 @@
+{
+  "name": "agendamento-barbearia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeanPersil/agendamento-barbearia.git"
+  },
+  "author": "Jean Lucas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeanPersil/agendamento-barbearia/issues"
+  },
+  "homepage": "https://github.com/jeanPersil/agendamento-barbearia#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "nodemon": "^3.1.11",
+    "prisma": "^7.3.0"
+  }
+}
