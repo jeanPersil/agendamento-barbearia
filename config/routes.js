@@ -1,7 +1,6 @@
 import express from "express";
-import { UserController } from "../api/controller/userController.js";
+import { userController } from "../api/instances.js";
 
-const userController = new UserController();
 const router = express.Router();
 
 router

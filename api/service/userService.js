@@ -1,12 +1,11 @@
-import prisma from "../prisma.js";
 import bcrypt from "bcrypt";
 import { naoExisteOuErro } from "../validator.js";
-import { UserRepository } from "../repositories/UserRepository.js";
 
 class UserService {
-  constructor() {
-    this.userRepo = new UserRepository();
+  constructor(userRepository) {
+    this.userRepo = userRepository;
   }
+
   criarUser = async (data) => {
     const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
 
@@ -71,6 +70,7 @@ class UserService {
       },
     });
   };
+
   async banirUsuario(idUsuario, data) {
     return this.userRepo.update(idUsuario, {
       bannedAt: new Date(),
