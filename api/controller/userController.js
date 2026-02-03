@@ -69,6 +69,34 @@ class UserController {
       return res.status(status).send(msg);
     }
   };
+
+  listarTodos = async (req, res) => {
+    const data = await userService.listarTodosUsuarios();
+    return res.status(200).json({
+      data: data,
+    });
+  };
+
+  banir = async (req, res) => {
+    const data = req.body;
+    const id = req.params.id;
+
+    try {
+      existeOuErro(id, "É necessario o id do usuario");
+      existeOuErro(data.motivo, "O banimento do usuario deve ter um motivo ");
+
+      await userService.banirUsuario(id, data);
+      return res.status(200).send();
+      
+    } catch (error) {
+      const status = error.statusCode || 500;
+      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
+
+      if (status === 500) console.error("ERRO 500:", error);
+
+      return res.status(status).send(msg);
+    }
+  };
 }
 
 export { UserController };

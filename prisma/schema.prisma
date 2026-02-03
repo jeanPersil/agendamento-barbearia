@@ -17,6 +17,8 @@ model User {
   telefone     String
   imagemUrl    String?
   admin        Boolean       @default(false)
+  bannedAt     DateTime?
+  bannedReason String?
   cliente      Cliente?
   profissional Profissional?
 }

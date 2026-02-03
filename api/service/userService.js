@@ -1,12 +1,14 @@
 import prisma from "../prisma.js";
 import bcrypt from "bcrypt";
 import { naoExisteOuErro } from "../validator.js";
+import { UserRepository } from "../repositories/UserRepository.js";
 
 class UserService {
+  constructor() {
+    this.userRepo = new UserRepository();
+  }
   criarUser = async (data) => {
-    const userComMesmoEmail = await prisma.user.findUnique({
-      where: { email: data.email },
-    });
+    const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
 
     naoExisteOuErro(
       userComMesmoEmail,
@@ -24,15 +26,13 @@ class UserService {
       admin: data.admin || false,
     };
 
-    if (dadosParaSalvar.role === "CLIENTE") {
+    if (data.role === "CLIENTE") {
       dadosParaSalvar.cliente = { create: {} };
-    } else if (dadosParaSalvar.role === "PROFISSIONAL") {
+    } else if (data.role === "PROFISSIONAL") {
       dadosParaSalvar.profissional = { create: {} };
     }
 
-    return prisma.user.create({
-      data: dadosParaSalvar,
-    });
+    return this.userRepo.create(dadosParaSalvar);
   };
 
   editarUser = async (userId, data) => {
@@ -43,9 +43,7 @@ class UserService {
     if (data.admin !== undefined) dadosParaAtualizar.admin = data.admin;
 
     if (data.email) {
-      const userComMesmoEmail = await prisma.user.findUnique({
-        where: { email: data.email },
-      });
+      const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
 
       if (userComMesmoEmail && userComMesmoEmail.id !== userId) {
         throw { statusCode: 400, message: "Este email já está em uso." };
@@ -59,11 +57,26 @@ class UserService {
       dadosParaAtualizar.senha = bcrypt.hashSync(data.senha, salt);
     }
 
-    return prisma.user.update({
-      where: { id: userId },
-      data: dadosParaAtualizar,
+    return this.userRepo.update(userId, dadosParaAtualizar);
+  };
+
+  listarTodosUsuarios = async () => {
+    return this.userRepo.findAll({
+      select: {
+        id: true,
+        nome: true,
+        telefone: true,
+        email: true,
+        bannedAt: true,
+      },
     });
   };
+  async banirUsuario(idUsuario, data) {
+    return this.userRepo.update(idUsuario, {
+      bannedAt: new Date(),
+      bannedReason: data.motivo,
+    });
+  }
 }
 
 export { UserService };
