@@ -4,6 +4,8 @@ import { UserController } from "../api/controller/userController.js";
 const userController = new UserController();
 const router = express.Router();
 
-router.post("/user", userController.salvarUser);
+router.route("/user").post(userController.salvar);
 
-export default router
+router.route("/user/:id").put(userController.editar);
+
+export default router;

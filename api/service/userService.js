@@ -1,47 +1,73 @@
 import prisma from "../prisma.js";
-
+import bcrypt from "bcrypt";
+import { naoExisteOuErro } from "../validator.js";
 
 class UserService {
- async criarUser(nome, email, senha, telefone, admin, role) {
-    const data = {
-        nome,
-        email,
-        senha, 
-        telefone,
-        admin,
+  async criarUser(data) {
+    const userComMesmoEmail = await prisma.user.findUnique({
+      where: { email: data.email },
+    });
+
+    naoExisteOuErro(
+      userComMesmoEmail,
+      "Já existe uma conta cadastrada com este e-mail.",
+    );
+
+    const salt = bcrypt.genSaltSync(10);
+    const senhaCriptografada = bcrypt.hashSync(data.senha, salt);
+
+    const dadosParaSalvar = {
+      nome: data.nome,
+      email: data.email,
+      senha: senhaCriptografada,
+      telefone: data.telefone,
+      admin: data.admin || false,
     };
 
-   
-    if (role === 'CLIENTE') {
-        data.cliente = {
-            create: {} 
-        };
-    } else if (role === 'PROFISSIONAL') {
-        data.profissional = {
-            create: {}
-        };
+    if (dadosParaSalvar.role === "CLIENTE") {
+      dadosParaSalvar.cliente = { create: {} };
+    } else if (dadosParaSalvar.role === "PROFISSIONAL") {
+      dadosParaSalvar.profissional = { create: {} };
     }
-    // O Prisma cria o User E o Cliente/Profissional numa única transação
-    return prisma.user.create({
-        data: data
-    });
-}
 
-  async editar (id, nome, email, senha, telefone, admin, role){
- 
+    return prisma.user.create({
+      data: dadosParaSalvar,
+    });
   }
 
-  async banir (){
+  async editarUser(userId, data) {
+    const dadosParaAtualizar = {};
+
+    if (data.nome) dadosParaAtualizar.nome = data.nome;
+    if (data.telefone) dadosParaAtualizar.telefone = data.telefone;
+    if (data.admin !== undefined) dadosParaAtualizar.admin = data.admin;
+
+    if (data.email) {
+      const userComMesmoEmail = await prisma.user.findUnique({
+        where: { email: data.email },
+      });
+
+      if (userComMesmoEmail && userComMesmoEmail.id !== userId) {
+        throw { statusCode: 400, message: "Este email já está em uso." };
+      }
+
+      dadosParaAtualizar.email = data.email;
+    }
+
+    if (data.senha) {
+      const salt = bcrypt.genSaltSync(10);
+      dadosParaAtualizar.senha = bcrypt.hashSync(data.senha, salt);
+    }
+
+    return prisma.user.update({
+      where: { id: userId },
+      data: dadosParaAtualizar,
+    });
+  }
+
+  async banir() {
     // logica para deletar banir um usuario
   }
-
-  async login(email, senha){
-
-  }
-
-  async logout(){
-    
-  }
 }
 
-export { UserService}
+export { UserService };

@@ -1,49 +1,74 @@
-import { existeOuErro, igualOuErro } from "../validator.js"
-import {UserService} from "../service/userService.js"
+import { existeOuErro, igualOuErro } from "../validator.js";
+import { UserService } from "../service/userService.js";
 
-const userService = new UserService()   
+const userService = new UserService();
 
 class UserController {
-  salvarUser = (req, res) => {
-
-  const {nome, email, senha, confirmarSenha, telefone, admin = false, role = "cliente", userId} = req.body
+  salvar = async (req, res) => {
+    const userData = req.body;
 
     try {
-      existeOuErro(nome, "O campo nome é obrigatorio")
-      existeOuErro(email,"O campo email é obrigatorio")
-      existeOuErro(senha,"O campo senha é obrigatorio")
-      igualOuErro(senha, confirmarSenha, "As senhas não conferem")
-      existeOuErro(telefone, "O campo telefone é obrigatorio")
-    } catch (msg) {
-      return res.status(400).send(msg)
+      existeOuErro(userData.nome, "O campo nome é obrigatorio");
+      existeOuErro(userData.email, "O campo email é obrigatorio");
+      existeOuErro(userData.senha, "O campo senha é obrigatorio");
+      igualOuErro(
+        userData.senha,
+        userData.confirmarSenha,
+        "As senhas não conferem",
+      );
+      existeOuErro(userData.telefone, "O campo telefone é obrigatorio");
+
+      await userService.criarUser(userData);
+      return res.status(201).send();
+    } catch (error) {
+      const status = error.statusCode || 500;
+      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
+
+      if (status === 500) console.error("ERRO 500:", error);
+
+      return res.status(status).send(msg);
     }
-    if( userId ){
-      userService.editar(userId, nome, email, senha, telefone, admin, role).then((user) => {
-        return res.status(200).send(user)
-      }).catch((msg) => {
-        return res.status(500).send(msg)
-      })
-    } else {
-      userService.criarUser(nome, email, senha, telefone, admin, role).then((_) => {
-        console.log("usuario criado com sucesso");
-        return res.status(201).send()
-      }).catch((error) => {
-         console.error(" ERRO REAL:", error.message);
-  console.error(" DETALHES:", JSON.stringify(error, null, 2));
-        return res.status(500).send(error)
-      })
+  };
+
+  editar = async (req, res) => {
+    const userData = req.body;
+    const idUrl = req.params.id;
+    try {
+      existeOuErro(idUrl, "Usuario não encontrado");
+
+      if (userData.nome !== undefined) {
+        existeOuErro(userData.nome, "Nome não pode ser vazio");
+      }
+
+      if (userData.email !== undefined) {
+        existeOuErro(userData.email, "Email não pode ser vazio");
+      }
+
+      if (userData.senha !== undefined) {
+        existeOuErro(userData.senha, "Senha não pode ser vazia");
+        igualOuErro(
+          userData.senha,
+          userData.confirmarSenha,
+          "As senhas não conferem",
+        );
+      }
+
+      if (userData.telefone !== undefined) {
+        existeOuErro(userData.telefone, "Telefone não pode ser vazio");
+      }
+
+      await userService.editarUser(idUrl, userData);
+
+      return res.status(200).send();
+    } catch (error) {
+      const status = error.statusCode || 500;
+      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
+
+      if (status === 500) console.error("ERRO 500:", error);
+
+      return res.status(status).send(msg);
     }
-  }
-
-  login = (req, res) => {
-
-  }
-
-  logout = (req, res) => {
-  
-  
-  }
-
+  };
 }
 
-export { UserController}
+export { UserController };
