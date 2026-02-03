@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { naoExisteOuErro } from "../validator.js";
 
 class UserService {
-  async criarUser(data) {
+  criarUser = async (data) => {
     const userComMesmoEmail = await prisma.user.findUnique({
       where: { email: data.email },
     });
@@ -33,9 +33,9 @@ class UserService {
     return prisma.user.create({
       data: dadosParaSalvar,
     });
-  }
+  };
 
-  async editarUser(userId, data) {
+  editarUser = async (userId, data) => {
     const dadosParaAtualizar = {};
 
     if (data.nome) dadosParaAtualizar.nome = data.nome;
@@ -63,11 +63,7 @@ class UserService {
       where: { id: userId },
       data: dadosParaAtualizar,
     });
-  }
-
-  async banir() {
-    // logica para deletar banir um usuario
-  }
+  };
 }
 
 export { UserService };

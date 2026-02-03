@@ -1,13 +1,12 @@
-import { PrismaClient } from '@prisma/client';
-import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3';
+import { PrismaClient } from "@prisma/client";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
 
 const adapter = new PrismaBetterSqlite3({
-  url: "file:./dev.db"
-})
+  url: "file:./dev.db",
+});
 
-const prisma = new PrismaClient({ adapter })
+const prisma = new PrismaClient({ adapter });
 
-// Log para confirmar que agora vai!
 console.log("🚀 Prisma inicializado com sucesso do diretório local.");
 
 export default prisma;
