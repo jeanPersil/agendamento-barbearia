@@ -9,42 +9,14 @@ datasource db {
   provider = "sqlite"
 }
 
-model User {
-  id           String        @id @default(uuid())
-  nome         String
-  email        String        @unique
-  senha        String
-  telefone     String
-  imagemUrl    String?
-  admin        Boolean       @default(false)
-  bannedAt     DateTime?
-  bannedReason String?
-  cliente      Cliente?
-  profissional Profissional?
-}
+//////////////////////
+// ENUMS
+//////////////////////
 
-model Cliente {
-  id           String        @id @default(uuid())
-  userId       String        @unique
-  user         User          @relation(fields: [userId], references: [id])
-  agendamentos Agendamento[]
-}
-
-model Profissional {
-  id           String        @id @default(uuid())
-  bio          String?
-  userId       String        @unique
-  user         User          @relation(fields: [userId], references: [id])
-  agendamentos Agendamento[]
-}
-
-model Servico {
-  id           String        @id @default(uuid())
-  nome         String
-  descricao    String
-  preco        Decimal
-  duracaoMin   Int
-  agendamentos Agendamento[]
+enum Role {
+  CLIENTE
+  PROFISSIONAL
+  ADMIN
 }
 
 enum StatusAgendamento {
@@ -54,15 +26,72 @@ enum StatusAgendamento {
   FALTOU
 }
 
+//////////////////////
+// USER (base do sistema)
+//////////////////////
+
+model User {
+  id        String  @id @default(uuid())
+  nome      String
+  email     String  @unique
+  senha     String
+  telefone  String
+  imagemUrl String?
+  role      Role
+
+  bannedAt     DateTime?
+  bannedReason String?
+
+  // Relações
+  agendamentosComoCliente      Agendamento[] @relation("ClienteAgendamentos")
+  agendamentosComoProfissional Agendamento[] @relation("ProfissionalAgendamentos")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////
+// SERVIÇOS DA BARBEARIA
+//////////////////////
+
+model Servico {
+  id         String  @id @default(uuid())
+  nome       String  @unique
+  descricao  String
+  preco      Decimal
+  duracaoMin Int
+
+  agendamentos Agendamento[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+//////////////////////
+// AGENDAMENTOS
+//////////////////////
+
 model Agendamento {
-  id             String            @id @default(uuid())
-  dataHora       DateTime
-  status         StatusAgendamento @default(AGENDADO)
+  id       String            @id @default(uuid())
+  dataHora DateTime
+  status   StatusAgendamento @default(AGENDADO)
+
+  // Guarda o valor do serviço no momento do agendamento
   precoHistorico Decimal
+
+  //////////////////////
+  // RELAÇÕES
+  //////////////////////
+
+  clienteId String
+  cliente   User   @relation("ClienteAgendamentos", fields: [clienteId], references: [id])
+
   profissionalId String
-  profissional   Profissional      @relation(fields: [profissionalId], references: [id])
-  clienteId      String
-  cliente        Cliente           @relation(fields: [clienteId], references: [id])
-  servicoId      String
-  servico        Servico           @relation(fields: [servicoId], references: [id])
+  profissional   User   @relation("ProfissionalAgendamentos", fields: [profissionalId], references: [id])
+
+  servicoId String
+  servico   Servico @relation(fields: [servicoId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

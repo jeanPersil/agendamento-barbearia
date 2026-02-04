@@ -6,6 +6,10 @@ import { ServicoController } from "./controller/servicoController.js";
 import { ServicosRepository } from "./repositories/ServicosRepositoy.js";
 import { ServicoService } from "./service/servicoService.js";
 
+import { AgendamentoRepository } from "./repositories/agendamentoRepository.js";
+import { AgendamentoService } from "./service/agendamentoService.js";
+import { AgendamentoController } from "./controller/agendamentoController.js";
+
 // Instancia de usuario
 const userRepository = new UserRepository();
 const userService = new UserService(userRepository);
@@ -16,4 +20,14 @@ const servicoRepository = new ServicosRepository();
 const servicoService = new ServicoService(servicoRepository);
 const servicoController = new ServicoController(servicoService);
 
-export { userController, servicoController };
+// Instancia de agendamento
+const agendamentoRepository = new AgendamentoRepository();
+const agendamentoService = new AgendamentoService(
+  agendamentoRepository,
+  servicoRepository,
+  userRepository,
+);
+
+const agendamentoController = new AgendamentoController(agendamentoService);
+
+export { userController, servicoController, agendamentoController };

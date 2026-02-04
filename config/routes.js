@@ -1,5 +1,9 @@
 import express from "express";
-import { userController, servicoController } from "../api/instances.js";
+import {
+  userController,
+  servicoController,
+  agendamentoController,
+} from "../api/instances.js";
 
 const router = express.Router();
 
@@ -20,5 +24,7 @@ router
   .route("/servico/:id")
   .put(servicoController.editar)
   .delete(servicoController.deletar);
+
+router.route("/agendamento").post(agendamentoController.criar);
 
 export default router;

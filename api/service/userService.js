@@ -8,7 +8,6 @@ export class UserService {
 
   criarUser = async (data) => {
     const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
-
     naoExisteOuErro(
       userComMesmoEmail,
       "Já existe uma conta cadastrada com este e-mail.",
@@ -17,23 +16,28 @@ export class UserService {
     const salt = bcrypt.genSaltSync(10);
     const senhaCriptografada = bcrypt.hashSync(data.senha, salt);
 
+    let roleParaSalvar = data.role;
+
+    if (!roleParaSalvar) {
+      roleParaSalvar = "CLIENTE";
+    }
+
+    const rolesValidas = ["CLIENTE", "PROFISSIONAL", "ADMIN"];
+    if (!rolesValidas.includes(roleParaSalvar)) {
+      throw new Error("Tipo de usuário inválido.");
+    }
+
     const dadosParaSalvar = {
       nome: data.nome,
       email: data.email,
       senha: senhaCriptografada,
       telefone: data.telefone,
-      admin: data.admin || false,
+      role: roleParaSalvar, // Agora usa o Enum correto
+      // imagemUrl: data.imagemUrl,
     };
-
-    if (data.role === "CLIENTE") {
-      dadosParaSalvar.cliente = { create: {} };
-    } else if (data.role === "PROFISSIONAL") {
-      dadosParaSalvar.profissional = { create: {} };
-    }
 
     return this.userRepo.create(dadosParaSalvar);
   };
-
   editarUser = async (userId, data) => {
     const dadosParaAtualizar = {};
 

@@ -25,11 +25,16 @@ export class UserRepository extends IBaseRepository {
   }
 
   // --- MÉTODOS EXTRAS (ESPECÍFICOS DESTA CLASSE) ---
-  // Adicione livremente aqui, sem precisar declarar em interface
 
   async findByEmail(email) {
     return prisma.user.findUnique({
       where: { email: email },
+    });
+  }
+
+  async findByRole(role) {
+    return prisma.user.findMany({
+      where: { role: role }, // Ex: busca só quem é 'PROFISSIONAL'
     });
   }
 }
