@@ -22,27 +22,10 @@ export class AgendamentoService {
         "O ID informado pertence a um profissional, não a um cliente.",
       );
     }
-    
+
     if (profissional.role !== "PROFISSIONAL") {
       throw new Error("O usuário informado não é um profissional válido.");
     }
-
-    const dataHoraAgendamento = new Date(dataHora);
-
-    const dataPassada = dataHoraAgendamento < new Date();
-
-    if (dataPassada) {
-      throw new Error("A data do agendamento deve ser futura.");
-    }
-
-    const novoAgendamento = {
-      clienteId,
-      profissionalId,
-      servicoId,
-      dataHora: dataHoraAgendamento,
-      status: "AGENDADO",
-      precoHistorico: servico.preco,
-    };
 
     return await this.agendamentoRepo.create(novoAgendamento);
   };

@@ -13,7 +13,7 @@ export class AgendamentoRepository extends IBaseRepository {
       ...options,
       include: {
         cliente: {
-          select: { id: true, nome: true, email: true, telefone: true }, // Dica: Não traga a senha!
+          select: { id: true, nome: true, email: true, telefone: true },
         },
         profissional: {
           select: { id: true, nome: true },
@@ -88,6 +88,28 @@ export class AgendamentoRepository extends IBaseRepository {
         cliente: true,
         profissional: true,
         servico: true,
+      },
+    });
+  }
+
+  async buscarSlotsLivres(profissionalId, listaDeHorarios) {
+    return prisma.horario.findMany({
+      where: {
+        profissionalId: profissionalId,
+        dataHora: { in: listaDeHorarios }, 
+        disponivel: true, 
+      },
+    });
+  }
+
+  async ocuparSlots(idsDosSlots, agendamentoId) {
+    return prisma.horario.updateMany({
+      where: {
+        id: { in: idsDosSlots }, 
+      },
+      data: {
+        disponivel: false,
+        agendamentoId: agendamentoId,
       },
     });
   }

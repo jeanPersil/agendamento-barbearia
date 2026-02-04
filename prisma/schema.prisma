@@ -31,13 +31,14 @@ enum StatusAgendamento {
 //////////////////////
 
 model User {
-  id        String  @id @default(uuid())
-  nome      String
-  email     String  @unique
-  senha     String
-  telefone  String
-  imagemUrl String?
-  role      Role
+  id              String    @id @default(uuid())
+  nome            String
+  email           String    @unique
+  senha           String
+  telefone        String
+  imagemUrl       String?
+  role            Role
+  horariosCriados Horario[]
 
   bannedAt     DateTime?
   bannedReason String?
@@ -45,9 +46,8 @@ model User {
   // Relações
   agendamentosComoCliente      Agendamento[] @relation("ClienteAgendamentos")
   agendamentosComoProfissional Agendamento[] @relation("ProfissionalAgendamentos")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt                    DateTime      @default(now())
+  updatedAt                    DateTime      @updatedAt
 }
 
 //////////////////////
@@ -70,7 +70,6 @@ model Servico {
 //////////////////////
 // AGENDAMENTOS
 //////////////////////
-
 model Agendamento {
   id       String            @id @default(uuid())
   dataHora DateTime
@@ -82,16 +81,30 @@ model Agendamento {
   //////////////////////
   // RELAÇÕES
   //////////////////////
-
   clienteId String
   cliente   User   @relation("ClienteAgendamentos", fields: [clienteId], references: [id])
 
   profissionalId String
   profissional   User   @relation("ProfissionalAgendamentos", fields: [profissionalId], references: [id])
 
-  servicoId String
-  servico   Servico @relation(fields: [servicoId], references: [id])
+  servicoId        String
+  servico          Servico   @relation(fields: [servicoId], references: [id])
+  horariosOcupados Horario[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Horario {
+  id         String   @id @default(uuid())
+  dataHora   DateTime
+  disponivel Boolean  @default(true) 
+
+  profissionalId String
+  profissional   User   @relation(fields: [profissionalId], references: [id])
+
+  agendamentoId String?
+  agendamento   Agendamento? @relation(fields: [agendamentoId], references: [id])
+
+  @@unique([profissionalId, dataHora]) 
 }
