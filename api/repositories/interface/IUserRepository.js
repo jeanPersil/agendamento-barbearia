@@ -9,26 +9,27 @@ export class IUserRepository {
     }
   }
 
-  async create(data) {
+  create = async (data) => {
     throw new Error("Método não implementado");
-  }
+  };
 
-  async findAll(options) {
+  findAll = async (options) => {
     throw new Error("Método não implementado");
-  }
+  };
 
-  async update(id, data) {
+  update = async (id, data) => {
     throw new Error("Método não implementado");
-  }
+  };
 
-  async findByEmail(email) {
+  findByEmail = async (email) => {
     throw new Error("Método não implementado");
-  }
+  };
 
-  async findById(id) {
+  findById = async (id) => {
     throw new Error("Método não implementado");
-  }
-  async delete(id) {
+  };
+
+  delete = async (id) => {
     throw new Error("Método não implementado");
-  }
+  };
 }

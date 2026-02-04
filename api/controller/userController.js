@@ -19,7 +19,6 @@ export class UserController {
       );
       existeOuErro(userData.telefone, "O campo telefone é obrigatorio");
 
-      // 2. Usamos 'this.userService' em vez da variavel global
       await this.userService.criarUser(userData);
 
       return res.status(201).send();
@@ -55,7 +54,6 @@ export class UserController {
         existeOuErro(userData.telefone, "Telefone não pode ser vazio");
       }
 
-      // Usando 'this'
       await this.userService.editarUser(idUrl, userData);
 
       return res.status(200).send();
@@ -68,8 +66,15 @@ export class UserController {
   };
 
   listarTodos = async (req, res) => {
-    // Usando 'this'
     const data = await this.userService.listarTodosUsuarios();
+    return res.status(200).json({
+      data: data,
+    });
+  };
+
+  buscarPorEmail = async (req, res) => {
+    const email = req.body.email;
+    const data = await this.userService.buscarUsuarioPorEmail(email);
     return res.status(200).json({
       data: data,
     });
@@ -83,7 +88,6 @@ export class UserController {
       existeOuErro(id, "É necessario o id do usuario");
       existeOuErro(data.motivo, "O banimento do usuario deve ter um motivo ");
 
-      // Usando 'this'
       await this.userService.banirUsuario(id, data);
 
       return res.status(200).send();

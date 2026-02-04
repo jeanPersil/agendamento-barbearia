@@ -1,7 +1,7 @@
 // repositories/implementations/UserRepository.js
 
 import prisma from "../prisma.js";
-import { IUserRepository } from "../repositories/IUserRepository.js";
+import { IUserRepository } from "./interface/IUserRepository.js";
 
 export class UserRepository extends IUserRepository {
   async create(data) {

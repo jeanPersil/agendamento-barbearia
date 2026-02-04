@@ -58,6 +58,7 @@ model Agendamento {
   id             String            @id @default(uuid())
   dataHora       DateTime
   status         StatusAgendamento @default(AGENDADO)
+  precoHistorico Decimal
   profissionalId String
   profissional   Profissional      @relation(fields: [profissionalId], references: [id])
   clienteId      String

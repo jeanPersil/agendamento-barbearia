@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { naoExisteOuErro } from "../validator.js";
 
-class UserService {
+export class UserService {
   constructor(userRepository) {
     this.userRepo = userRepository;
   }
@@ -67,9 +67,14 @@ class UserService {
         telefone: true,
         email: true,
         bannedAt: true,
+        bannedReason: true,
       },
     });
   };
+
+  async buscarUsuarioPorEmail(emal) {
+    return this.userRepo.findByEmail(emal);
+  }
 
   async banirUsuario(idUsuario, data) {
     return this.userRepo.update(idUsuario, {
@@ -77,6 +82,15 @@ class UserService {
       bannedReason: data.motivo,
     });
   }
-}
 
-export { UserService };
+  async desbanirUsuario(idUsuario) {
+    return this.userRepo.update(idUsuario, {
+      bannedAt: null,
+      bannedReason: null,
+    });
+  }
+
+  async deletarUsuario(id) {
+    return this.userRepo.delete(id);
+  }
+}
