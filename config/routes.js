@@ -11,6 +11,14 @@ router
 router.route("/user/:id/ban").put(userController.banir);
 router.route("/user/:id").put(userController.editar);
 
-router.route("/servico").post(servicoController.salvar);
+router
+  .route("/servico")
+  .post(servicoController.salvar)
+  .get(servicoController.listar);
+
+router
+  .route("/servico/:id")
+  .put(servicoController.editar)
+  .delete(servicoController.deletar);
 
 export default router;

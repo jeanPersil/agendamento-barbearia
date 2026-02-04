@@ -27,11 +27,22 @@ export class ServicoService {
 
   async editarServico(id, data) {
     const servico = await this.servicoRepo.findOne({ id: id });
+
     existeOuErro(servico, "Serviço não encontrado.");
 
     const dadosParaAtualizar = {};
 
-    if (data.nome) dadosParaAtualizar.nome = data.nome;
+    if (data.nome) {
+      const servicoComMesmoNome = await this.servicoRepo.findOne({
+        nome: data.nome,
+      });
+      naoExisteOuErro(
+        servicoComMesmoNome,
+        "Já existe um serviço cadastrado com este nome.",
+      );
+      dadosParaAtualizar.nome = data.nome;
+    }
+
     if (data.descricao) dadosParaAtualizar.descricao = data.descricao;
     if (data.preco) dadosParaAtualizar.preco = data.preco;
     if (data.duracao) dadosParaAtualizar.duracaoMin = data.duracao;
