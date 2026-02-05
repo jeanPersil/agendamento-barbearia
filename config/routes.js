@@ -3,6 +3,7 @@ import {
   userController,
   servicoController,
   agendamentoController,
+  agendaController,
 } from "../api/instances.js";
 
 const router = express.Router();
@@ -25,6 +26,9 @@ router
   .put(servicoController.editar)
   .delete(servicoController.deletar);
 
-router.route("/agendamento").post(agendamentoController.criar);
+router
+  .route("/agenda")
+  .post(agendaController.gerarAgenda)
+  .get(agendaController.listarDisponibilidade);
 
 export default router;
