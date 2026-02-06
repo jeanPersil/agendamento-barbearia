@@ -2,7 +2,6 @@ import prisma from "../prisma.js";
 import { IBaseRepository } from "./interface/IBaseRepository.js";
 
 export class ServicosRepository extends IBaseRepository {
-  
   // --- MÉTODOS DO CONTRATO ---
   async create(data) {
     return prisma.servico.create({ data });
@@ -24,8 +23,6 @@ export class ServicosRepository extends IBaseRepository {
     return prisma.servico.delete({ where: { id } });
   }
 
-  // --- MÉTODOS EXTRAS ---
-  
   async findOne(filtro) {
     return prisma.servico.findFirst({
       where: filtro,

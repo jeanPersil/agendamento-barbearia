@@ -6,8 +6,8 @@ export class AgendaService {
 
   // CONFIGURAÇÃO DAS FICHAS
   config = {
-    horaInicio: 8, // 08:00
-    totalFichas: 20, // 20 fichas de 30min (das 08h às 18h)
+    horaInicio: 8, 
+    totalFichas: 20, 
     tamanhoFichaMin: 30,
   };
 
@@ -39,7 +39,6 @@ export class AgendaService {
         horaAtual.setHours(this.config.horaInicio, 0, 0, 0);
 
         for (let ficha = 0; ficha < this.config.totalFichas; ficha++) {
-          // Pular o almoço (ex: fichas 8 e 9)
           if (ficha === 8 || ficha === 9) {
             horaAtual.setMinutes(
               horaAtual.getMinutes() + this.config.tamanhoFichaMin,
@@ -67,7 +66,8 @@ export class AgendaService {
     return { message: "Agenda atualizada com sucesso." };
   }
 
-  async listarDisponibilidadeGeral(dataStr, servicoId) {
+  async listarDisponibilidade(profissionalId, dataStr,   servicoId) {
+
     const servico = await this.agendaRepo.findServicoById(servicoId);
     if (!servico) throw new Error("Serviço não encontrado");
 
@@ -80,54 +80,42 @@ export class AgendaService {
     const fimDia = new Date(dataStr);
     fimDia.setUTCHours(23, 59, 59, 999);
 
-    const todosSlots = await this.agendaRepo.findAllDisponiveisDoDia(
+    const slotsLivres = await this.agendaRepo.findDisponiveisDoDia(
+      profissionalId,
       inicioDia,
       fimDia,
     );
 
-    const slotsPorProfissional = {};
+    const horariosValidos = [];
 
-    todosSlots.forEach((slot) => {
-      if (!slotsPorProfissional[slot.profissionalId]) {
-        slotsPorProfissional[slot.profissionalId] = [];
+    const mapaSlots = new Map(
+      slotsLivres.map((s) => [new Date(s.dataHora).getTime(), s]),
+    );
+
+    for (const slot of slotsLivres) {
+      let cabeOServico = true;
+
+      for (let i = 0; i < fichasNecessarias; i++) {
+        const horaCheck = new Date(slot.dataHora);
+        horaCheck.setMinutes(
+          horaCheck.getMinutes() + i * this.config.tamanhoFichaMin,
+        );
+
+        if (!mapaSlots.has(horaCheck.getTime())) {
+          cabeOServico = false;
+          break;
+        }
       }
-      slotsPorProfissional[slot.profissionalId].push(slot);
-    });
 
-    const horariosDisponiveisSet = new Set();
-
-    for (const profissionalId in slotsPorProfissional) {
-      const slotsDoBarbeiro = slotsPorProfissional[profissionalId];
-
-      const mapaSlots = new Map(
-        slotsDoBarbeiro.map((s) => [new Date(s.dataHora).getTime(), s]),
-      );
-
-      for (const slot of slotsDoBarbeiro) {
-        let cabeOServico = true;
-
-        for (let i = 0; i < fichasNecessarias; i++) {
-          const horaCheck = new Date(slot.dataHora);
-          horaCheck.setMinutes(
-            horaCheck.getMinutes() + i * this.config.tamanhoFichaMin,
-          );
-
-          if (!mapaSlots.has(horaCheck.getTime())) {
-            cabeOServico = false;
-            break;
-          }
-        }
-
-        if (cabeOServico) {
-          const horaFormatada = slot.dataHora
-            .toISOString()
-            .split("T")[1]
-            .slice(0, 5);
-          horariosDisponiveisSet.add(horaFormatada);
-        }
+      if (cabeOServico) {
+        const horaFormatada = slot.dataHora
+          .toISOString()
+          .split("T")[1]
+          .slice(0, 5); // Ex: "14:00"
+        horariosValidos.push(horaFormatada);
       }
     }
 
-    return Array.from(horariosDisponiveisSet).sort();
+    return horariosValidos;
   }
 }
