@@ -6,31 +6,36 @@ import {
   authController,
 } from "../api/instances.js";
 
+import passport from "./passport.js";
+
 const router = express.Router();
 
+// rotas de autenticação
 router.route("/auth").post(authController.login);
 
 router
   .route("/user")
   .post(userController.salvar)
-  .get(userController.listarTodos);
+  .get(passport.authenticate(), userController.listarTodos); // admin
 
-router.route("/user/:id/ban").put(userController.banir);
-router.route("/user/:id").put(userController.editar);
+router
+  .route("/user/:id/ban")
+  .put(passport.authenticate(), userController.banir); // admin
+router.route("/user/:id").put(passport.authenticate(), userController.editar); // admin
 
 router
   .route("/servico")
-  .post(servicoController.salvar)
-  .get(servicoController.listar);
+  .post(passport.authenticate(), servicoController.salvar) // admin
+  .get(passport.authenticate(), servicoController.listar);
 
 router
   .route("/servico/:id")
-  .put(servicoController.editar)
-  .delete(servicoController.deletar);
+  .put(passport.authenticate(), servicoController.editar) //admin
+  .delete(passport.authenticate(), servicoController.deletar); //admin
 
 router
   .route("/agendamento")
-  .post(agendamentoController.criar)
-  .get(agendamentoController.horariosDisponibilidade);
+  .post(passport.authenticate(), agendamentoController.criar)
+  .get(passport.authenticate(), agendamentoController.horariosDisponibilidade);
 
 export default router;
