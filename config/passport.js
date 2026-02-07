@@ -1,22 +1,21 @@
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import prisma from "../api/prisma.js";
+import { UserRepository } from "../api/repositories/userRepository.js";
+
+const userRepository = new UserRepository();
 
 const authSecret = process.env.secret_key;
 
 const cookieExtractor = function (req) {
   let token = null;
-
   if (req && req.cookies) {
     token = req.cookies["token"];
   }
-
   return token;
 };
 
 const params = {
   secretOrKey: authSecret,
-  // 2. Tenta ler do Header (Bearer) primeiro, se não achar, tenta ler do Cookie
   jwtFromRequest: ExtractJwt.fromExtractors([
     ExtractJwt.fromAuthHeaderAsBearerToken(),
     cookieExtractor,
@@ -25,7 +24,7 @@ const params = {
 
 const strategy = new Strategy(params, async (payload, done) => {
   try {
-    const user = await prisma.user.findUnique({ where: { id: payload.id } });
+    const user = await userRepository.findById(payload.id);
 
     if (user) {
       return done(null, {
@@ -37,7 +36,7 @@ const strategy = new Strategy(params, async (payload, done) => {
 
     return done(null, false);
   } catch (error) {
-    return done(err, false);
+    return done(error, false);
   }
 });
 
