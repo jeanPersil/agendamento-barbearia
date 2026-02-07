@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
-import { naoExisteOuErro } from "../validator.js";
+import { ValidationError, naoExisteOuErro } from "../validator.js";
 
 export class UserService {
   constructor(userRepository) {
     this.userRepo = userRepository;
   }
 
-  criarUser = async (data) => {
+  criarUser = async (data, usuarioSolicitante) => {
     const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
     naoExisteOuErro(
       userComMesmoEmail,
@@ -16,15 +16,12 @@ export class UserService {
     const salt = bcrypt.genSaltSync(10);
     const senhaCriptografada = bcrypt.hashSync(data.senha, salt);
 
-    let roleParaSalvar = data.role;
+    let roleParaSalvar = "CLIENTE";
 
-    if (!roleParaSalvar) {
-      roleParaSalvar = "CLIENTE";
-    }
+    if (data.role && data.role !== "CLIENTE") {
+      const isAdmin = usuarioSolicitante && usuarioSolicitante.role === "ADMIN";
 
-    const rolesValidas = ["CLIENTE", "PROFISSIONAL", "ADMIN"];
-    if (!rolesValidas.includes(roleParaSalvar)) {
-      throw new Error("Tipo de usuário inválido.");
+      if (isAdmin) roleParaSalvar = data.role;
     }
 
     const dadosParaSalvar = {
@@ -32,7 +29,7 @@ export class UserService {
       email: data.email,
       senha: senhaCriptografada,
       telefone: data.telefone,
-      role: roleParaSalvar, 
+      role: roleParaSalvar,
       // imagemUrl: data.imagemUrl,
     };
 
@@ -49,7 +46,9 @@ export class UserService {
       const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
 
       if (userComMesmoEmail && userComMesmoEmail.id !== userId) {
-        throw { statusCode: 400, message: "Este email já está em uso." };
+        throw new ValidationError(
+          "Já existe uma conta cadastrada com este e-mail.",
+        );
       }
 
       dadosParaAtualizar.email = data.email;

@@ -1,4 +1,4 @@
-import { existeOuErro } from "../validator.js";
+import { existeOuErro, ValidationError } from "../validator.js";
 import { gerarSlots, toHora, toMinutos } from "../helpers.js";
 
 class AgendamentoService {
@@ -16,7 +16,7 @@ class AgendamentoService {
     );
 
     if (!disponibilidade) {
-      return { message: "Profissional não trabalha neste dia", code: "FOLGA" };
+      throw new ValidationError("Profissional sem disponibilidade");
     }
 
     const slots = gerarSlots(
@@ -60,7 +60,7 @@ class AgendamentoService {
     const servico = await this.agendamentoRepo.findServicoById(servicoId);
 
     if (!servico) {
-      throw { statusCode: 400, message: "Serviço não encontrado" };
+      ValidationError("Serviço não econtrado.");
     }
 
     const agendamentos = await this.agendamentoRepo.findAgendamentosDoDia(
@@ -87,7 +87,7 @@ class AgendamentoService {
         const horaAtual = toHora(totalExistente);
 
         if (slotsNovo.includes(horaAtual)) {
-          throw { statusCode: 400, message: "Horário ocupado" };
+          throw new ValidationError("Horario disponivel");
         }
         totalExistente += 30;
       }

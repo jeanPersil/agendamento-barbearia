@@ -5,7 +5,7 @@ export class UserController {
     this.userService = userService;
   }
 
-  salvar = async (req, res) => {
+  registrar = async (req, res) => {
     const userData = req.body;
 
     try {
@@ -19,7 +19,32 @@ export class UserController {
       );
       existeOuErro(userData.telefone, "O campo telefone é obrigatorio");
 
-      await this.userService.criarUser(userData);
+      await this.userService.criarUser(userData, null);
+
+      return res.status(201).send();
+    } catch (error) {
+      const status = error.statusCode || 500;
+      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
+      if (status === 500) console.error("ERRO 500:", error);
+      return res.status(status).send(msg);
+    }
+  };
+
+  registroPeloAdmin = async (req, res) => {
+    const userData = req.body;
+
+    try {
+      existeOuErro(userData.nome, "O campo nome é obrigatorio");
+      existeOuErro(userData.email, "O campo email é obrigatorio");
+      existeOuErro(userData.senha, "O campo senha é obrigatorio");
+      igualOuErro(
+        userData.senha,
+        userData.confirmarSenha,
+        "As senhas não conferem",
+      );
+      existeOuErro(userData.telefone, "O campo telefone é obrigatorio");
+
+      await this.userService.criarUser(userData, req.user);
 
       return res.status(201).send();
     } catch (error) {
