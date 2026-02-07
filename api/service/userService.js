@@ -32,7 +32,7 @@ export class UserService {
       email: data.email,
       senha: senhaCriptografada,
       telefone: data.telefone,
-      role: roleParaSalvar, // Agora usa o Enum correto
+      role: roleParaSalvar, 
       // imagemUrl: data.imagemUrl,
     };
 

@@ -1,4 +1,4 @@
-import prisma from "../prisma.js"; // Ajuste o caminho do seu prisma
+import prisma from "../prisma.js";
 import { IBaseRepository } from "./interface/IBaseRepository.js";
 
 export class UserRepository extends IBaseRepository {

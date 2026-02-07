@@ -3,9 +3,12 @@ import {
   userController,
   servicoController,
   agendamentoController,
+  authController,
 } from "../api/instances.js";
 
 const router = express.Router();
+
+router.route("/auth").post(authController.login);
 
 router
   .route("/user")
@@ -29,7 +32,5 @@ router
   .route("/agendamento")
   .post(agendamentoController.criar)
   .get(agendamentoController.horariosDisponibilidade);
-
-  
 
 export default router;
