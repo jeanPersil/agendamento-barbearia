@@ -11,7 +11,8 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="../css/style.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+
     <title>Login | Barbearia</title>
     <style></style>
   </head>
@@ -26,13 +27,15 @@
             Acesse sua conta e faça seu agendamento!
           </p>
 
+          <div id="alert"></div>
+
           <form id="loginForm">
             <div class="mb-3">
               <label for="email" class="form-label small fw-bold">E-mail</label>
               <input
                 type="email"
                 class="form-control form-control-lg"
-                id="email"
+                name="email"
                 placeholder="nome@exemplo.com"
                 required
               />
@@ -43,7 +46,7 @@
               <input
                 type="password"
                 class="form-control form-control-lg"
-                id="senha"
+                name="password"
                 placeholder="********"
                 required
               />
@@ -69,7 +72,7 @@
           class="col-md-6 logo-section d-none d-md-flex flex-column text-center"
         >
           <img
-            src="../assets/imgs/logo.jpg"
+            src="/assets/imgs/logo.jpg"
             class="img-fluid p-4"
             style="max-height: 60%; object-fit: contain"
             alt="Logo da barbearia"
@@ -78,5 +81,8 @@
         </div>
       </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script type="module" src="./js/modules/auth.js"></script>
   </body>
 </html>

@@ -18,7 +18,7 @@ export class AuthController {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-        maxAge: 1000 * 60 * 60 * 24 * 3, // 3 dias (mesmo tempo do token)
+        maxAge: 1000 * 60 * 60 * 24 * 3,
       });
 
       return res.status(200).json({
@@ -33,10 +33,9 @@ export class AuthController {
       const status = error.statusCode || 500;
       const msg = error.statusCode ? error.message : "Erro interno inesperado.";
       if (status === 500) console.error("ERRO 500:", error);
-      return res.status(status).send(msg);
+      return res.status(status).json({
+        message: msg,
+      });
     }
   };
-
-
-  
 }
