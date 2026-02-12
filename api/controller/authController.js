@@ -1,41 +1,37 @@
-import { existeOuErro } from "../validator.js";
+import { existeOuErro } from "../utils/validator.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 
 export class AuthController {
   constructor(authService) {
     this.authService = authService;
   }
 
-  login = async (req, res) => {
+  login = asyncHandler(async (req, res) => {
     const { email, senha } = req.body;
 
-    try {
-      existeOuErro(email, "O campo email é obrigatorio");
-      existeOuErro(senha, "O campo senha é obrigatorio");
+    existeOuErro(email, "O campo email é obrigatório");
+    existeOuErro(senha, "O campo senha é obrigatório");
 
-      const resultado = await this.authService.login(email, senha);
+    const resultado = await this.authService.login(email, senha);
 
-      res.cookie("token", resultado.token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-        maxAge: 1000 * 60 * 60 * 24 * 3,
-      });
-
-      return res.status(200).json({
-        user: {
-          id: resultado.id,
-          name: resultado.name,
-          email: resultado.email,
-          role: resultado.role,
-        },
-      });
-    } catch (error) {
-      const status = error.statusCode || 500;
-      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
-      if (status === 500) console.error("ERRO 500:", error);
-      return res.status(status).json({
-        message: msg,
-      });
+    if (!resultado) {
+      throw new ValidationError("Email ou senha inválidos");
     }
-  };
+
+    res.cookie("token", resultado.token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 1000 * 60 * 60 * 24 * 3,
+    });
+
+    return res.status(200).json({
+      user: {
+        id: resultado.id,
+        name: resultado.name,
+        email: resultado.email,
+        role: resultado.role,
+      },
+    });
+  });
 }

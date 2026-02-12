@@ -1,4 +1,4 @@
-import { existeOuErro, igualOuErro } from "../validator.js";
+import { existeOuErro, igualOuErro } from "../utils/validator.js";
 
 export class ServicoController {
   constructor(servicoService) {

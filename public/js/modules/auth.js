@@ -1,7 +1,7 @@
 import { login } from "../api/auth.js";
 import { renderAlert } from "../components/alert.js";
 const form = document.getElementById("loginForm");
-const alert = document.getElementById("alert");
+const alertContainer = document.getElementById("alert");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -12,8 +12,7 @@ form.addEventListener("submit", async (e) => {
       email: userData.get("email"),
       password: userData.get("password"),
     });
-    console.log("sucesso! ", data);
   } catch (error) {
-    alert.innerHTML = renderAlert(error.message);
+    alertContainer.innerHTML = renderAlert(error.message);
   }
 });

@@ -6,8 +6,8 @@ import {
   authController,
 } from "../api/instances.js";
 
-import passport from "./passport.js";
-import { verificarAdmin } from "./admin.js";
+import passport from "../middlewares/passport.js";
+import { verificarAdmin } from "../middlewares/admin.js";
 
 const router = express.Router();
 

@@ -1,5 +1,5 @@
-import { existeOuErro, ValidationError } from "../validator.js";
-import { gerarSlots, toHora, toMinutos } from "../helpers.js";
+import { existeOuErro, ValidationError } from "../utils/validator.js";
+import { gerarSlots, toHora, toMinutos } from "../utils/helpers.js";
 
 class AgendamentoService {
   constructor(agendamentoRepo) {

@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import { ValidationError, naoExisteOuErro } from "../validator.js";
+import { ValidationError, naoExisteOuErro } from "../utils/validator.js";
 
 export class UserService {
   constructor(userRepository) {
