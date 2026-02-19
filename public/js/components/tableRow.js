@@ -87,36 +87,57 @@ ${
 }
 
 export function createUserRow(user) {
-  const roleBadge =
-    user.tipo === "Admin"
-      ? "bg-purple-subtle text-purple"
-      : user.tipo === "Profissional"
-        ? "bg-primary-subtle text-primary"
-        : "bg-secondary-subtle text-secondary";
+  const isBanned = user.bannedAt !== null;
+  const statusLabel = isBanned ? "Banido" : "Ativo";
+  const statusClass = isBanned
+    ? "bg-danger-subtle text-danger"
+    : "bg-success-subtle text-success";
 
-  const statusClass =
-    user.role === true
-      ? "bg-success-subtle text-success"
-      : "bg-danger-subtle text-danger";
+  const userRole = user.role || "Desconhecido";
+
+  // Define cores baseadas no Role
+  let roleBadgeColor = "bg-secondary-subtle text-secondary";
+
+  if (userRole === "ADMIN") {
+    roleBadgeColor = "bg-purple-subtle text-purple";
+  } else if (userRole === "BARBEIRO" || userRole === "PROFISSIONAL") {
+    roleBadgeColor = "bg-primary-subtle text-primary";
+  }
+
+  const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(user.nome)}&background=random&color=fff`;
 
   return `
-      <tr onclick="window.abrirDetalhesUsuario(${user.id})">
-        <td class="ps-4">
-          <div class="d-flex align-items-center">
-            <img src="${user.foto}" class="avatar-sm me-3 rounded-circle" width="40" height="40" alt="${user.nome}">
-            <div>
-              <h6 class="mb-0 fw-bold text-dark">${user.nome}</h6>
-              <small class="text-muted">ID: #${user.id}</small>
-            </div>
+    <tr onclick="window.abrirDetalhesUsuario('${user.id}')" style="cursor: pointer;">
+      <td class="ps-4">
+        <div class="d-flex align-items-center">
+          <img src="${avatarUrl}" class="avatar-sm me-3 rounded-circle" width="40" height="40" alt="${user.nome}">
+          <div>
+            <h6 class="mb-0 fw-bold text-dark">${user.nome}</h6>
+            <small class="text-muted" style="font-size: 0.75rem;">ID: ...${user.id.slice(-4)}</small>
           </div>
-        </td>
-        <td class="text-muted">${user.email}</td>
-        <td class="text-muted">${user.telefone}</td>
-        <td><span class="badge ${roleBadge} rounded-pill fw-normal">${user.tipo}</span></td>
-        <td><span class="badge ${statusClass} rounded-pill fw-normal">${user.status}</span></td>
-        <td class="text-end pe-4">
-          <button class="btn btn-sm btn-light text-muted"><i class="bi bi-three-dots-vertical"></i></button>
-        </td>
-      </tr>
-    `;
+        </div>
+      </td>
+      
+      <td class="text-muted">${user.email}</td>
+      <td class="text-muted">${user.telefone}</td>
+      
+      <td>
+        <span class="badge ${roleBadgeColor} rounded-pill fw-normal">
+            ${userRole}
+        </span>
+      </td>
+      
+      <td>
+        <span class="badge ${statusClass} rounded-pill fw-normal">
+            ${statusLabel}
+        </span>
+      </td>
+      
+      <td class="text-end pe-4">
+        <button class="btn btn-sm btn-light text-muted border-0">
+            <i class="bi bi-three-dots-vertical"></i>
+        </button>
+      </td>
+    </tr>
+  `;
 }

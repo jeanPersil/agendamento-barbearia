@@ -1,10 +1,13 @@
-async function login({ email, password }) {
+async function getAllUsers({ page, limit }) {
   try {
-    const { data } = await axios.post("/auth", {
-      email: email,
-      senha: password,
+    const { data: apiResponse } = await axios.get("/user", {
+      params: {
+        page,
+        limit,
+      },
     });
-    return data;
+
+    return { users: apiResponse.data, meta: apiResponse.meta };
   } catch (error) {
     const message = error.response?.data?.message || "Erro de conexão";
     console.log(error);
@@ -12,5 +15,4 @@ async function login({ email, password }) {
   }
 }
 
-export { login };
-
+export { getAllUsers };

@@ -22,7 +22,7 @@ router
     verificarAdmin,
     userController.registroPeloAdmin,
   )
-  .get(passport.authenticate(), verificarAdmin, userController.listarTodos); // admin
+  .get(userController.listarTodos); // admin
 
 router
   .route("/user/:id/ban")
