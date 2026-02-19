@@ -13,22 +13,22 @@ export default function renderNavbar() {
 
     <ul class="nav nav-pills flex-column mb-auto">
       <li class="nav-item">
-        <a href="/dashboard.html" class="nav-link ${path.includes("dashboard") ? "active" : ""}" aria-current="page">
+        <a href="/dashboard" class="nav-link ${path.includes("dashboard") ? "active" : ""}" aria-current="page">
           <i class="bi bi-grid me-2"></i> Dashboard
         </a>
       </li>
       <li>
-        <a href="/agenda.html" class="nav-link ${path.includes("agenda") ? "active" : ""}">
+        <a href="/agenda" class="nav-link ${path.includes("agenda") ? "active" : ""}">
           <i class="bi bi-calendar-event me-2"></i> Agenda
         </a>
       </li>
       <li>
-        <a href="/clientes.html" class="nav-link ${path.includes("clientes") ? "active" : ""}">
-          <i class="bi bi-people me-2"></i> Clientes
+        <a href="/usuarios" class="nav-link ${path.includes("usuarios") ? "active" : ""}">
+          <i class="bi bi-people me-2"></i> Usuarios
         </a>
       </li>
       <li>
-        <a href="/financeiro.html" class="nav-link ${path.includes("financeiro") ? "active" : ""}">
+        <a href="/servicos" class="nav-link ${path.includes("servicos") ? "active" : ""}">
           <i class="bi bi-cash-coin me-2"></i> Servicos
         </a>
       </li>
@@ -36,16 +36,14 @@ export default function renderNavbar() {
 
     <hr style="border-color: #444" />
 
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
-        <i class="bi bi-gear me-2"></i>
-        <strong>Configurações</strong>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-        <li><a class="dropdown-item" href="#">Perfil</a></li>
-        <li><hr class="dropdown-divider"></li>
-        <li><a class="dropdown-item" href="#" id="btn-logout">Sair</a></li>
-      </ul>
-    </div>
+
+    <a href="#" 
+       id="btn-logout" 
+       class="d-flex align-items-center text-white text-decoration-none px-2 py-1 rounded hover-effect"
+       style="transition: background 0.3s;"
+    >
+      <i class="bi bi-box-arrow-right me-2 text-danger"></i>
+      <strong>Sair</strong>
+    </a>
   `;
 }

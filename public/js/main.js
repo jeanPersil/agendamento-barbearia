@@ -1,5 +1,6 @@
 import { initLogin } from "./modules/auth.js";
-import { startDashBoard } from "./modules/dashboard.js";
+import startDashBoard from "./modules/dashboard.js";
+import startUser from "./modules/user.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const path = window.location.pathname;
@@ -9,7 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (path.includes("dashboard")) {
-    console.log("dentro do main.js");
     startDashBoard();
+  }
+
+  if (path.includes("usuarios")) {
+    startUser();
   }
 });

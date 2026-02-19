@@ -20,26 +20,58 @@
     <link rel="stylesheet" href="/css/style.css" />
 
     <style>
-      body {
-        background-color: #f8f9fa;
-        font-family: "Inter", sans-serif;
+      .timeline {
+        position: relative;
+        padding-left: 1rem;
       }
-      .sidebar {
-        min-height: 100vh;
-        background-color: #1e1e1e;
-        color: #fff;
+
+      .timeline::before {
+        content: " ";
+        background: #e9ecef;
+        display: inline-block;
+        position: absolute;
+        left: 26px;
+        width: 2px;
+        height: 100%;
+        z-index: 1;
+        top: 10px;
       }
-      .nav-link {
-        color: #b0b0b0;
-        margin-bottom: 5px;
-        border-radius: 8px;
-        transition: all 0.3s;
+
+      .timeline-item {
+        position: relative;
+        padding-left: 3rem;
+        margin-bottom: 1.5rem;
       }
-      .nav-link:hover,
-      .nav-link.active {
-        background-color: rgba(212, 160, 23, 0.15);
-        color: #d4a017;
-        font-weight: 600;
+
+      .timeline-dot {
+        position: absolute;
+        left: 19px;
+        top: 5px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        z-index: 2;
+        background-color: #fff;
+        border: 3px solid #dee2e6;
+      }
+
+      .timeline-dot.done {
+        background-color: #198754;
+        border-color: #198754;
+      }
+
+      .timeline-dot.current {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        box-shadow: 0 0 0 4px rgba(255, 193, 7, 0.2);
+      }
+
+      .appointment-card.active {
+        background-color: #fff9e6;
+        border: 1px solid #ffecb5;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-left: -1rem;
       }
     </style>
   </head>
@@ -62,27 +94,15 @@
           <div id="stats-container" class="row g-3 mb-4"></div>
 
           <div class="card shadow-sm border-0">
-            <div
-              class="card-header bg-white py-3 d-flex justify-content-between align-items-center"
-            >
-              <h5 class="mb-0 fw-bold">Agendamentos de hoje</h5>
-              <button class="btn btn-sm btn-outline-dark">Ver todos</button>
+            <div class="card-header bg-white py-3">
+              <h5 class="mb-0 fw-bold">
+                <i class="bi bi-calendar-day me-2 text-warning"></i> Agenda de
+                Hoje
+              </h5>
             </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <table class="table table-hover table-custom align-middle mb-0">
-                  <thead class="bg-light">
-                    <tr>
-                      <th scope="col" class="ps-4">Cliente</th>
-                      <th scope="col">Profissional</th>
-                      <th scope="col">Serviço</th>
-                      <th scope="col">Horário</th>
-                      <th scope="col">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody id="tabela-agendamentos"></tbody>
-                </table>
-              </div>
+
+            <div class="card-body">
+              <div id="agenda-timeline" class="timeline py-2"></div>
             </div>
           </div>
         </main>

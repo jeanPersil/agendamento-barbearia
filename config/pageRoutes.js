@@ -11,8 +11,16 @@ router.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/login.html"));
 });
 
-router.get("/dashboard", (req, rse) => {
+router.get("/dashboard", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/dashboard.html"));
+});
+
+router.get("/usuarios", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/user.html"));
+});
+
+router.get("/servicos", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/servico.html"));
 });
 
 export default router;

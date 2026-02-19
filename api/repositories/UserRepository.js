@@ -2,14 +2,16 @@ import prisma from "../prisma.js";
 import { IBaseRepository } from "./interface/IBaseRepository.js";
 
 export class UserRepository extends IBaseRepository {
-  // --- MÉTODOS DO CONTRATO (OBRIGATÓRIOS) ---
-
   async create(data) {
     return prisma.user.create({ data });
   }
 
   async findAll(options = {}) {
     return prisma.user.findMany(options);
+  }
+
+  async count(options = {}) {
+    return prisma.user.count(options);
   }
 
   async findById(id) {
@@ -24,8 +26,6 @@ export class UserRepository extends IBaseRepository {
     return prisma.user.delete({ where: { id } });
   }
 
-  // --- MÉTODOS EXTRAS (ESPECÍFICOS DESTA CLASSE) ---
-
   async findByEmail(email) {
     return prisma.user.findUnique({
       where: { email: email },
@@ -34,7 +34,7 @@ export class UserRepository extends IBaseRepository {
 
   async findByRole(role) {
     return prisma.user.findMany({
-      where: { role: role }, // Ex: busca só quem é 'PROFISSIONAL'
+      where: { role: role },
     });
   }
 }

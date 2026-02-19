@@ -72,9 +72,24 @@ export class UserController {
   });
 
   listarTodos = async (req, res) => {
-    const data = await this.userService.listarTodosUsuarios();
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+
+    const { users, total } = await this.userService.listarTodosUsuarios(
+      page,
+      limit,
+    );
+
+    const totalPages = Math.ceil(total / limit);
+
     return res.status(200).json({
-      data: data,
+      data: users,
+      meta: {
+        totalItems: total,
+        totalPages: totalPages,
+        currentPage: page,
+        itemsPerPage: limit,
+      },
     });
   };
 

@@ -85,3 +85,38 @@ ${
     </tr>
   `;
 }
+
+export function createUserRow(user) {
+  const roleBadge =
+    user.tipo === "Admin"
+      ? "bg-purple-subtle text-purple"
+      : user.tipo === "Profissional"
+        ? "bg-primary-subtle text-primary"
+        : "bg-secondary-subtle text-secondary";
+
+  const statusClass =
+    user.role === true
+      ? "bg-success-subtle text-success"
+      : "bg-danger-subtle text-danger";
+
+  return `
+      <tr onclick="window.abrirDetalhesUsuario(${user.id})">
+        <td class="ps-4">
+          <div class="d-flex align-items-center">
+            <img src="${user.foto}" class="avatar-sm me-3 rounded-circle" width="40" height="40" alt="${user.nome}">
+            <div>
+              <h6 class="mb-0 fw-bold text-dark">${user.nome}</h6>
+              <small class="text-muted">ID: #${user.id}</small>
+            </div>
+          </div>
+        </td>
+        <td class="text-muted">${user.email}</td>
+        <td class="text-muted">${user.telefone}</td>
+        <td><span class="badge ${roleBadge} rounded-pill fw-normal">${user.tipo}</span></td>
+        <td><span class="badge ${statusClass} rounded-pill fw-normal">${user.status}</span></td>
+        <td class="text-end pe-4">
+          <button class="btn btn-sm btn-light text-muted"><i class="bi bi-three-dots-vertical"></i></button>
+        </td>
+      </tr>
+    `;
+}

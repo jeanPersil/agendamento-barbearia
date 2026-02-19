@@ -62,17 +62,32 @@ export class UserService {
     return this.userRepo.update(userId, dadosParaAtualizar);
   };
 
-  listarTodosUsuarios = async () => {
-    return this.userRepo.findAll({
+  listarTodosUsuarios = async (page = 1, limit = 10) => {
+    const skip = (page - 1) * limit;
+
+    const options = {
+      skip: skip,
+      take: limit,
       select: {
         id: true,
         nome: true,
         telefone: true,
         email: true,
+        role: true,
         bannedAt: true,
         bannedReason: true,
       },
-    });
+      orderBy: {
+        id: "desc",
+      },
+    };
+
+    const [users, total] = await Promise.all([
+      this.userRepo.findAll(options),
+      this.userRepo.count(),
+    ]);
+
+    return { users, total };
   };
 
   async buscarUsuarioPorEmail(emal) {

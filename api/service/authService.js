@@ -1,9 +1,8 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
 import { existeOuErro, ValidationError } from "../utils/validator.js";
-import jwt from "jwt-simple"; // 1. Importação nomeada correta
+import jwt from "jwt-simple"; //
 
-// Dica: Garanta que o nome no .env seja exatamente igual (ex: JWT_SECRET)
 const authSecret = process.env.secret_key;
 
 export class AuthService {

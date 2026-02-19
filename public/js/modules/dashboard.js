@@ -1,16 +1,6 @@
 import createStatCard from "../components/cards.js";
-import { createAppointmentRow } from "../components/tableRow.js";
-
-import renderHeader from "../components/layout/header.js";
-import renderNavbar from "../components/layout/navBar.js";
-
-function renderLayout() {
-  renderHeader({
-    title: "Seja bem vindo ao seu DashBoard",
-    subtitle: "Veja como esta sua barbearia hoje",
-  });
-  renderNavbar();
-}
+import createAppointmentItem from "../components/itemAgendamento.js";
+import renderLayout from "../components/layout/renderLayout.js";
 
 function renderStats() {
   const container = document.getElementById("stats-container");
@@ -50,48 +40,59 @@ function renderStats() {
     .join("");
 }
 
-function renderAppointments() {
-  const tbody = document.getElementById("tabela-agendamentos");
-  if (!tbody) return;
+function renderTimeline() {
+  const container = document.getElementById("agenda-timeline");
+  if (!container) return;
 
-  const agendamentosDoDia = [
+  const agendaData = [
     {
       id: 1,
-      cliente: { nome: "Jean Lucas", telefone: "(11) 99999-0000", foto: null },
-      profissional: "Marcus Reed",
-      servico: "Corte Degradê",
-      horario: "14:00",
-      status: "CONFIRMADO",
+      horario: "09:00",
+      cliente: { nome: "João S." },
+      servico: "Corte",
+      status: "FEITO",
     },
     {
       id: 2,
-      cliente: { nome: "Ana Silva", telefone: "(11) 98888-1111", foto: null },
-      profissional: "Marcus Reed",
-      servico: "Barba + Corte",
-      horario: "15:30",
-      status: "PENDENTE",
+      horario: "09:45",
+      cliente: { nome: "Daniel C." },
+      servico: "Barba",
+      status: "FEITO",
     },
     {
       id: 3,
-      cliente: {
-        nome: "Roberto Carlos",
-        telefone: "(11) 97777-2222",
-        foto: null,
-      },
-      profissional: "João Barbeiro",
-      servico: "Pezinho",
-      horario: "16:00",
-      status: "CANCELADO",
+      horario: "10:30",
+      cliente: { nome: "Alex O." },
+      servico: "Corte + Barba",
+      status: "AGORA",
+    },
+    {
+      id: 4,
+      horario: "11:15",
+      cliente: { nome: "Rafael S." },
+      servico: "Corte",
+      status: "PENDENTE",
+    },
+    {
+      id: 5,
+      horario: "13:30",
+      cliente: { nome: "Nathan L." },
+      servico: "Corte + Barba",
+      status: "PENDENTE",
     },
   ];
 
-  tbody.innerHTML = agendamentosDoDia
-    .map((agendamento) => createAppointmentRow(agendamento))
+  container.innerHTML = agendaData
+    .map((item) => createAppointmentItem(item))
     .join("");
 }
 
-export function startDashBoard() {
+export default function startDashBoard() {
+  
   renderStats();
-  renderAppointments();
-  renderLayout();
+  renderTimeline();
+  renderLayout({
+    HeaderTitle: "Seja bem vindo ao seu DashBoard",
+    HeaderSubtitle: "Veja como esta sua barbearia hoje",
+  });
 }

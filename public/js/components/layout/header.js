@@ -1,4 +1,4 @@
-export default function renderHeader({ title, subtitle }) {
+export default function renderHeader(title, subtitle) {
   const header = document.getElementById("header");
 
   if (!header) return;
@@ -7,8 +7,7 @@ export default function renderHeader({ title, subtitle }) {
 
   const fullName = localStorage.getItem("userName") || "Visitante";
   const userPhoto = localStorage.getItem("userAvatar") || defaultPhoto;
-
-  const userRole = "Barbeiro";
+  const userRole = localStorage.getItem("userRole");
 
   header.innerHTML = `
     <div class="container-fluid bg-white border-bottom py-3 px-4">
