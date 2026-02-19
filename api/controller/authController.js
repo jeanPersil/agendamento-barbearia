@@ -30,7 +30,7 @@ export class AuthController {
         id: resultado.id,
         name: resultado.name,
         email: resultado.email,
-        role: resultado.role,
+        page: "/dashboard.html"
       },
     });
   });

@@ -4,7 +4,6 @@ async function login({ email, password }) {
       email: email,
       senha: password,
     });
-
     return data;
   } catch (error) {
     const message = error.response?.data?.message || "Erro de conexão";
