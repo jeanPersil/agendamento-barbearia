@@ -25,19 +25,26 @@ export class UserController {
   });
 
   registroPeloAdmin = asyncHandler(async (req, res) => {
-    const userData = req.body;
+    const { nome, email, senha, confirmarSenha, telefone, role } = req.body;
 
-    existeOuErro(userData.nome, "O campo nome é obrigatorio");
-    existeOuErro(userData.email, "O campo email é obrigatorio");
-    existeOuErro(userData.senha, "O campo senha é obrigatorio");
-    igualOuErro(
-      userData.senha,
-      userData.confirmarSenha,
-      "As senhas não conferem",
-    );
-    existeOuErro(userData.telefone, "O campo telefone é obrigatorio");
+    existeOuErro(nome, "O campo nome é obrigatorio");
+    existeOuErro(email, "O campo email é obrigatorio");
+    existeOuErro(senha, "O campo senha é obrigatorio");
+    igualOuErro(senha, confirmarSenha, "As senhas não conferem");
+    existeOuErro(telefone, "O campo telefone é obrigatorio");
 
-    await this.userService.criarUser(userData, req.user);
+    const dadosDoUsuario = {
+      nome,
+      email,
+      senha,
+      telefone,
+      role,
+    };
+
+    await this.userService.criarUser({
+      data: dadosDoUsuario,
+      usuarioSolicitante: req.user,
+    });
 
     return res.status(201).send();
   });

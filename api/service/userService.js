@@ -1,12 +1,16 @@
 import bcrypt from "bcrypt";
-import { ValidationError, naoExisteOuErro } from "../utils/validator.js";
+import {
+  ValidationError,
+  naoExisteOuErro,
+  ForbiddenError,
+} from "../utils/validator.js";
 
 export class UserService {
   constructor(userRepository) {
     this.userRepo = userRepository;
   }
 
-  criarUser = async (data, usuarioSolicitante) => {
+  criarUser = async ({ data, usuarioSolicitante }) => {
     const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
     naoExisteOuErro(
       userComMesmoEmail,
@@ -14,27 +18,19 @@ export class UserService {
     );
 
     const salt = bcrypt.genSaltSync(10);
-    const senhaCriptografada = bcrypt.hashSync(data.senha, salt);
+    data.senha = bcrypt.hashSync(data.senha, salt);
 
-    let roleParaSalvar = "CLIENTE";
+    const tentandoCargoAlto = data.role && data.role !== "CLIENTE";
+    const naoEAdmin =
+      !usuarioSolicitante || usuarioSolicitante.role !== "ADMIN";
 
-    if (data.role && data.role !== "CLIENTE") {
-      const isAdmin = usuarioSolicitante && usuarioSolicitante.role === "ADMIN";
-
-      if (isAdmin) roleParaSalvar = data.role;
+    if (tentandoCargoAlto && naoEAdmin) {
+      throw new ForbiddenError();
     }
 
-    const dadosParaSalvar = {
-      nome: data.nome,
-      email: data.email,
-      senha: senhaCriptografada,
-      telefone: data.telefone,
-      role: roleParaSalvar,
-      // imagemUrl: data.imagemUrl,
-    };
-
-    return this.userRepo.create(dadosParaSalvar);
+    return this.userRepo.create(data);
   };
+
   editarUser = async (userId, data) => {
     const dadosParaAtualizar = {};
 

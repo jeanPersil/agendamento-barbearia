@@ -49,6 +49,7 @@ export default function initUsers() {
   });
 
   fetchData();
+  modalCriarUsuario();
 }
 
 async function fetchData() {
@@ -133,41 +134,43 @@ function renderStats() {
     .join("");
 }
 
-document.getElementById("buttonCreateUser").addEventListener("click", () => {
-  document.body.insertAdjacentHTML("beforeend", openModalCreateUser());
+function modalCriarUsuario() {
+  document.getElementById("buttonCreateUser").addEventListener("click", () => {
+    document.body.insertAdjacentHTML("beforeend", openModalCreateUser());
 
-  window.closeModalCreateUser = function () {
-    const modal = document.getElementById("custom-modal-create-user");
-    if (modal) {
-      modal.remove();
-    }
-  };
+    window.closeModalCreateUser = function () {
+      const modal = document.getElementById("custom-modal-create-user");
+      if (modal) {
+        modal.remove();
+      }
+    };
 
-  const form = document.getElementById("form-create-user");
+    const form = document.getElementById("form-create-user");
 
-  form.addEventListener("submit", async (event) => {
-    event.preventDefault();
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-    try {
-      const newUser = new FormData(form);
+      try {
+        const newUser = new FormData(form);
 
-      await createUser({
-        nome: newUser.get("userName"),
-        email: newUser.get("userEmail"),
-        senha: newUser.get("userPassword"),
-        confirmarSenha: newUser.get("userConfirmPassword"),
-        role: newUser.get("userRole"),
-        telefone: newUser.get("userPhone"),
-      });
+        await createUser({
+          nome: newUser.get("userName"),
+          email: newUser.get("userEmail"),
+          senha: newUser.get("userPassword"),
+          confirmarSenha: newUser.get("userConfirmPassword"),
+          role: newUser.get("userRole"),
+          telefone: newUser.get("userPhone"),
+        });
 
-      window.closeModalCreateUser();
-      window.location.reload();
-    } catch (error) {
-      console.log("Caiu no catch!", error);
-      document.getElementById("alert").innerHTML = renderAlert(error.message);
-    }
+        window.closeModalCreateUser();
+        window.location.reload();
+      } catch (error) {
+        console.log("Caiu no catch!", error);
+        document.getElementById("alert").innerHTML = renderAlert(error.message);
+      }
+    });
   });
-});
+}
 
 window.mudarPaginaUsers = function (newPage) {
   if (newPage < 1 || newPage > state.totalPages) return;
