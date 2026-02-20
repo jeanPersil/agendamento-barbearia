@@ -11,7 +11,6 @@ import { verificarAdmin } from "../middlewares/admin.js";
 
 const router = express.Router();
 
-// rotas de autenticação
 router.route("/auth").post(authController.login);
 router.route("/auth/register").post(userController.registrar);
 

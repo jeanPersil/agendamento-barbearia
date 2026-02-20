@@ -1,7 +1,8 @@
 import renderLayout from "../components/layout/renderLayout.js";
 import createStatCard from "../components/cards.js";
 import { createUserRow } from "../components/tableRow.js";
-import { getAllUsers } from "../api/user.js";
+import { getAllUsers, createUser } from "../api/user.js";
+import { renderAlert } from "../components/alert.js";
 
 import { createPagination } from "../components/pagination.js";
 import {
@@ -9,6 +10,8 @@ import {
   renderTableError,
   renderTableEmpty,
 } from "../components/tableHelper.js";
+
+import { openModalCreateUser } from "../components/modalCreateUser.js";
 
 const state = {
   users: [],
@@ -45,7 +48,6 @@ export default function initUsers() {
     HeaderSubtitle: "Gerencie todos os usuários da sua barbearia",
   });
 
-  renderStats();
   fetchData();
 }
 
@@ -103,10 +105,11 @@ function updateTableUI() {
 
 function calculateStats() {
   const activeCount = state.users.filter(
-    (u) => u.status === "Ativo" || u.status === "active",
+    (user) => user.bannedAt === null,
   ).length;
+
   const bannedCount = state.users.filter(
-    (u) => u.status === "Banido" || u.status === "banned",
+    (user) => user.bannedAt != null,
   ).length;
 
   statsData[0].value = state.totalItems.toString();
@@ -129,6 +132,42 @@ function renderStats() {
     )
     .join("");
 }
+
+document.getElementById("buttonCreateUser").addEventListener("click", () => {
+  document.body.insertAdjacentHTML("beforeend", openModalCreateUser());
+
+  window.closeModalCreateUser = function () {
+    const modal = document.getElementById("custom-modal-create-user");
+    if (modal) {
+      modal.remove();
+    }
+  };
+
+  const form = document.getElementById("form-create-user");
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    try {
+      const newUser = new FormData(form);
+
+      await createUser({
+        nome: newUser.get("userName"),
+        email: newUser.get("userEmail"),
+        senha: newUser.get("userPassword"),
+        confirmarSenha: newUser.get("userConfirmPassword"),
+        role: newUser.get("userRole"),
+        telefone: newUser.get("userPhone"),
+      });
+
+      window.closeModalCreateUser();
+      window.location.reload();
+    } catch (error) {
+      console.log("Caiu no catch!", error);
+      document.getElementById("alert").innerHTML = renderAlert(error.message);
+    }
+  });
+});
 
 window.mudarPaginaUsers = function (newPage) {
   if (newPage < 1 || newPage > state.totalPages) return;

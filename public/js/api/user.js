@@ -1,3 +1,35 @@
+async function createUser({
+  nome,
+  email,
+  senha,
+  confirmarSenha,
+  role,
+  telefone,
+}) {
+  try {
+    const data = await axios.post(
+      "/user",
+      {
+        nome,
+        email,
+        senha,
+        confirmarSenha,
+        role,
+        telefone,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+
+    return data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Erro de conexão";
+    console.log(error);
+    throw new Error(message);
+  }
+}
+
 async function getAllUsers({ page, limit }) {
   try {
     const { data: apiResponse } = await axios.get("/user", {
@@ -15,4 +47,4 @@ async function getAllUsers({ page, limit }) {
   }
 }
 
-export { getAllUsers };
+export { getAllUsers, createUser };
