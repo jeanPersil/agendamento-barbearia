@@ -78,16 +78,18 @@ export class UserController {
     return res.status(200).send();
   });
 
-  listarTodos = async (req, res) => {
+  listarTodos = asyncHandler(async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const { nome, tipo, status } = req.query;
 
-    const { users, total } = await this.userService.listarTodosUsuarios(
+    const { users, total, totalPages } = await this.userService.listarUsuarios({
       page,
       limit,
-    );
-
-    const totalPages = Math.ceil(total / limit);
+      nome,
+      tipo,
+      status,
+    });
 
     return res.status(200).json({
       data: users,
@@ -98,15 +100,7 @@ export class UserController {
         itemsPerPage: limit,
       },
     });
-  };
-
-  buscarPorEmail = async (req, res) => {
-    const email = req.body.email;
-    const data = await this.userService.buscarUsuarioPorEmail(email);
-    return res.status(200).json({
-      data: data,
-    });
-  };
+  });
 
   banir = asyncHandler(async (req, res) => {
     const data = req.body;

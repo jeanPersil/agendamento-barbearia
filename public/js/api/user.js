@@ -30,12 +30,15 @@ async function createUser({
   }
 }
 
-async function getAllUsers({ page, limit }) {
+async function getAllUsers({ page, limit, nome, tipo, status }) {
   try {
     const { data: apiResponse } = await axios.get("/user", {
       params: {
         page,
         limit,
+        nome,
+        tipo,
+        status,
       },
     });
 

@@ -19,6 +19,11 @@ const state = {
   itemsPerPage: 7,
   totalPages: 1,
   totalItems: 0,
+  filters: {
+    nome: "",
+    tipo: "",
+    status: "",
+  },
 };
 
 let statsData = [
@@ -50,6 +55,7 @@ export default function initUsers() {
 
   fetchData();
   modalCriarUsuario();
+  filterUser();
 }
 
 async function fetchData() {
@@ -59,7 +65,12 @@ async function fetchData() {
     const { users, meta } = await getAllUsers({
       page: state.currentPage,
       limit: state.itemsPerPage,
+      nome: state.filters.nome || undefined,
+      tipo: state.filters.tipo || undefined,
+      status: state.filters.status || undefined,
     });
+
+    console.log(users);
 
     state.users = users;
     state.totalPages = meta.totalPages;
@@ -181,3 +192,26 @@ window.mudarPaginaUsers = function (newPage) {
 window.abrirDetalhesUsuario = function (id) {
   console.log(`Clicou no usuário ID: ${id}`);
 };
+
+function filterUser() {
+  const buttonFilter = document.getElementById("filterUser");
+  const txtSearch = document.getElementById("txtSearch");
+  const activeFilter = document.getElementById("filtro-tipo");
+  const statsFilter = document.getElementById("filtro-status");
+
+  buttonFilter.addEventListener("click", () => {
+    state.filters.nome = txtSearch.value.trim();
+    state.filters.tipo = activeFilter.value;
+    state.filters.status = statsFilter.value;
+
+    state.currentPage = 1;
+
+    fetchData();
+  });
+
+  txtSearch.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") {
+      buttonFilter.click();
+    }
+  });
+}

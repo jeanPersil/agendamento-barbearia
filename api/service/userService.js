@@ -58,12 +58,32 @@ export class UserService {
     return this.userRepo.update(userId, dadosParaAtualizar);
   };
 
-  listarTodosUsuarios = async (page = 1, limit = 10) => {
-    const skip = (page - 1) * limit;
+  listarUsuarios = async ({ page = 1, limit = 10, nome, tipo, status }) => {
+    const skip = (Number(page) - 1) * Number(limit);
+    const take = Number(limit);
+
+    const where = {};
+
+    if (nome) {
+      where.nome = { contains: nome };
+    }
+
+    if (tipo) {
+      where.role = tipo;
+    }
+
+    if (status) {
+      if (status === "banido") {
+        where.bannedAt = { not: null };
+      } else if (status === "ativo") {
+        where.bannedAt = null;
+      }
+    }
 
     const options = {
-      skip: skip,
-      take: limit,
+      where,
+      skip,
+      take,
       select: {
         id: true,
         nome: true,
@@ -80,15 +100,16 @@ export class UserService {
 
     const [users, total] = await Promise.all([
       this.userRepo.findAll(options),
-      this.userRepo.count(),
+      this.userRepo.count({ where }),
     ]);
 
-    return { users, total };
+    return {
+      users,
+      total,
+      totalPages: Math.ceil(total / take),
+      currentPage: Number(page),
+    };
   };
-
-  async buscarUsuarioPorEmail(emal) {
-    return this.userRepo.findByEmail(emal);
-  }
 
   async banirUsuario(idUsuario, data) {
     return this.userRepo.update(idUsuario, {

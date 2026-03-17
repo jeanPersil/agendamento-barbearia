@@ -21,7 +21,7 @@ router
     verificarAdmin,
     userController.registroPeloAdmin,
   )
-  .get(userController.listarTodos); // admin
+  .get(userController.listarTodos);
 
 router
   .route("/user/:id/ban")

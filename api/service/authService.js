@@ -29,7 +29,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       iat: now,
-      exp: now + 60 * 60 * 24 * 3, // 3 dias
+      exp: now + 60 * 60 * 24 * 3, 
     };
 
     return {

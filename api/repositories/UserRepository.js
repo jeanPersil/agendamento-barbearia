@@ -10,6 +10,25 @@ export class UserRepository extends IBaseRepository {
     return prisma.user.findMany(options);
   }
 
+  async search({ name, role, status }) {
+    const where = {};
+
+    if (name) {
+      where.nome = {
+        contains: name,
+      };
+    }
+
+    if (role) {
+      where.role = role;
+    }
+
+    return prisma.user.findMany({
+      where: where,
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
   async count(options = {}) {
     return prisma.user.count(options);
   }
