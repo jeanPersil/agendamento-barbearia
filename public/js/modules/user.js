@@ -3,6 +3,7 @@ import createStatCard from "../components/cards.js";
 import { createUserRow } from "../components/tableRow.js";
 import { getAllUsers, createUser } from "../api/user.js";
 import { renderAlert } from "../components/alert.js";
+import { abrirModalDetalhesUsuario } from "../components/UserDetails.js";
 
 import { createPagination } from "../components/pagination.js";
 import {
@@ -176,7 +177,6 @@ function modalCriarUsuario() {
         window.closeModalCreateUser();
         window.location.reload();
       } catch (error) {
-        console.log("Caiu no catch!", error);
         document.getElementById("alert").innerHTML = renderAlert(error.message);
       }
     });
@@ -190,7 +190,14 @@ window.mudarPaginaUsers = function (newPage) {
 };
 
 window.abrirDetalhesUsuario = function (id) {
-  console.log(`Clicou no usuário ID: ${id}`);
+  const user = state.users.find((u) => u.id === id);
+
+  if (!user) {
+    console.error("Usuário não encontrado!");
+    return;
+  }
+
+  abrirModalDetalhesUsuario(user, fetchData);
 };
 
 function filterUser() {

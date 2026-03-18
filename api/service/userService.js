@@ -37,6 +37,7 @@ export class UserService {
     if (data.nome) dadosParaAtualizar.nome = data.nome;
     if (data.telefone) dadosParaAtualizar.telefone = data.telefone;
     if (data.admin !== undefined) dadosParaAtualizar.admin = data.admin;
+    if (data.role) dadosParaAtualizar.role = data.role;
 
     if (data.email) {
       const userComMesmoEmail = await this.userRepo.findByEmail(data.email);
@@ -48,11 +49,6 @@ export class UserService {
       }
 
       dadosParaAtualizar.email = data.email;
-    }
-
-    if (data.senha) {
-      const salt = bcrypt.genSaltSync(10);
-      dadosParaAtualizar.senha = bcrypt.hashSync(data.senha, salt);
     }
 
     return this.userRepo.update(userId, dadosParaAtualizar);

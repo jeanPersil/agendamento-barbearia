@@ -2,7 +2,6 @@ import prisma from "../prisma.js";
 import { IBaseRepository } from "./interface/IBaseRepository.js";
 
 export class ServicosRepository extends IBaseRepository {
-  // --- MÉTODOS DO CONTRATO ---
   async create(data) {
     return prisma.servico.create({ data });
   }

@@ -73,6 +73,7 @@ export class UserController {
       existeOuErro(userData.telefone, "Telefone não pode ser vazio");
     }
 
+    console.log("passou aqui no controller");
     await this.userService.editarUser(idUrl, userData);
 
     return res.status(200).send();

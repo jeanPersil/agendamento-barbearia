@@ -50,4 +50,26 @@ async function getAllUsers({ page, limit, nome, tipo, status }) {
   }
 }
 
-export { getAllUsers, createUser };
+async function editUser({ id, email, telefone, tipo, nome }) {
+  try {
+    const { data } = await axios.put(
+      `/user/${id}`,
+      {
+        nome,
+        email,
+        telefone,
+        role: tipo,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+
+    return data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Erro de conexão";;
+    throw new Error(message);
+  }
+}
+
+export { getAllUsers, createUser, editUser };

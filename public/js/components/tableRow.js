@@ -95,11 +95,10 @@ export function createUserRow(user) {
 
   const userRole = user.role || "Desconhecido";
 
-  // Define cores baseadas no Role
   let roleBadgeColor = "bg-secondary-subtle text-secondary";
 
   if (userRole === "ADMIN") {
-    roleBadgeColor = "bg-purple-subtle text-purple";
+    roleBadgeColor = "bg-dark text-white";
   } else if (userRole === "BARBEIRO" || userRole === "PROFISSIONAL") {
     roleBadgeColor = "bg-primary-subtle text-primary";
   }
@@ -132,12 +131,7 @@ export function createUserRow(user) {
             ${statusLabel}
         </span>
       </td>
-      
-      <td class="text-end pe-4">
-        <button class="btn btn-sm btn-light text-muted border-0">
-            <i class="bi bi-three-dots-vertical"></i>
-        </button>
-      </td>
+    
     </tr>
   `;
 }
