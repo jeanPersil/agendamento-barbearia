@@ -1,9 +1,7 @@
 import bcrypt from "bcrypt";
-import {
-  ValidationError,
-  naoExisteOuErro,
-  ForbiddenError,
-} from "../utils/validator.js";
+import { naoExisteOuErro } from "../utils/validator.js";
+
+import { ForbiddenError, ValidationError } from "../utils/errors.js";
 
 export class UserService {
   constructor(userRepository) {
@@ -114,7 +112,7 @@ export class UserService {
     });
   }
 
-  async desbanirUsuario(idUsuario) {
+  async desbanirUsuario({ idUsuario }) {
     return this.userRepo.update(idUsuario, {
       bannedAt: null,
       bannedReason: null,

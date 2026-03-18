@@ -91,4 +91,8 @@ async function banirUser({ id, motivo }) {
   }
 }
 
+async function removeBan(){
+  
+}
+
 export { getAllUsers, createUser, editUser, banirUser };

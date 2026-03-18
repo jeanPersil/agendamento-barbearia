@@ -5,44 +5,31 @@ import {
   agendamentoController,
   authController,
 } from "../api/instances.js";
-
 import passport from "../middlewares/passport.js";
 import { verificarAdmin } from "../middlewares/admin.js";
 
 const router = express.Router();
+const auth = passport.authenticate();
 
-router.route("/auth").post(authController.login);
-router.route("/auth/register").post(userController.registrar);
+// Auth
+router.post("/auth", authController.login);
+router.post("/auth/register", userController.registrar);
 
-router
-  .route("/user")
-  .post(
-    passport.authenticate(),
-    verificarAdmin,
-    userController.registroPeloAdmin,
-  )
-  .get(userController.listarTodos);
+// Usuários
+router.get("/user", userController.listarTodos);
+router.post("/user", auth, verificarAdmin, userController.registroPeloAdmin);
+router.put("/user/:id", auth, verificarAdmin, userController.editar);
+router.put("/user/:id/ban", auth, verificarAdmin, userController.banir);
+router.put("/user/:id/removeBan", auth, verificarAdmin, userController.removeBan);
 
-router
-  .route("/user/:id/ban")
-  .put(passport.authenticate(), verificarAdmin, userController.banir); // admin
-router
-  .route("/user/:id")
-  .put(passport.authenticate(), verificarAdmin, userController.editar); // admin
+// Serviços
+router.get("/servico", auth, servicoController.listar);
+router.post("/servico", auth, verificarAdmin, servicoController.salvar);
+router.put("/servico/:id", auth, verificarAdmin, servicoController.editar);
+router.delete("/servico/:id", auth, verificarAdmin, servicoController.deletar);
 
-router
-  .route("/servico")
-  .post(passport.authenticate(), verificarAdmin, servicoController.salvar) // admin
-  .get(passport.authenticate(), servicoController.listar);
-
-router
-  .route("/servico/:id")
-  .put(passport.authenticate(), verificarAdmin, servicoController.editar) //admin
-  .delete(passport.authenticate(), verificarAdmin, servicoController.deletar); //admin
-
-router
-  .route("/agendamento")
-  .post(passport.authenticate(), agendamentoController.criar)
-  .get(passport.authenticate(), agendamentoController.horariosDisponibilidade);
+// Agendamentos
+router.post("/agendamento", auth, agendamentoController.criar);
+router.get("/agendamento", auth, agendamentoController.horariosDisponibilidade);
 
 export default router;

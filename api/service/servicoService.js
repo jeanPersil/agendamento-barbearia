@@ -1,8 +1,4 @@
-import {
-  naoExisteOuErro,
-  existeOuErro,
-  ForbiddenError,
-} from "../utils/validator.js";
+import { naoExisteOuErro, existeOuErro } from "../utils/validator.js";
 
 export class ServicoService {
   constructor(servicoRepository) {

@@ -1,7 +1,8 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import { existeOuErro, ValidationError } from "../utils/validator.js";
-import jwt from "jwt-simple"; //
+import { existeOuErro } from "../utils/validator.js";
+import { ValidationError } from "../utils/errors.js";
+import jwt from "jwt-simple";
 
 const authSecret = process.env.secret_key;
 
@@ -29,7 +30,7 @@ export class AuthService {
       email: user.email,
       role: user.role,
       iat: now,
-      exp: now + 60 * 60 * 24 * 3, 
+      exp: now + 60 * 60 * 24 * 3,
     };
 
     return {
