@@ -104,13 +104,13 @@ export class UserController {
   });
 
   banir = asyncHandler(async (req, res) => {
-    const data = req.body;
+    const { motivo } = req.body;
     const id = req.params.id;
 
     existeOuErro(id, "É necessario o id do usuario");
-    existeOuErro(data.motivo, "O banimento do usuario deve ter um motivo ");
+    existeOuErro(motivo, "O banimento do usuario deve ter um motivo ");
 
-    await this.userService.banirUsuario(id, data);
+    await this.userService.banirUsuario(id, motivo);
 
     return res.status(200).send();
   });

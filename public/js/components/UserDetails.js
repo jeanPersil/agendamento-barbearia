@@ -1,4 +1,4 @@
-import { editUser } from "../api/user.js";
+import { editUser, banirUser } from "../api/user.js";
 
 export function abrirModalDetalhesUsuario(user, onSuccessCallback) {
   // 1. Remove modal antigo
@@ -95,7 +95,6 @@ export function abrirModalDetalhesUsuario(user, onSuccessCallback) {
   const modalInstance = new bootstrap.Modal(modalElement);
   modalInstance.show();
 
-  // --- LÓGICA DE SALVAR ---
   document
     .getElementById("form-editar-usuario")
     .addEventListener("submit", async (e) => {
@@ -136,14 +135,17 @@ export function abrirModalDetalhesUsuario(user, onSuccessCallback) {
   const btnBanir = document.getElementById("btnBanir");
   if (btnBanir) {
     btnBanir.addEventListener("click", async () => {
-      const motivo = prompt("Qual o motivo do banimento deste usuário?");
-      if (motivo !== null) {
+      const motivoDoBanimento = prompt(
+        "Qual o motivo do banimento deste usuário?",
+      );
+      if (motivoDoBanimento !== null) {
         try {
-          console.log(`Banindo usuário ${user.id} pelo motivo: ${motivo}`);
+          await banirUser({ id: user.id, motivo: motivoDoBanimento });
           modalInstance.hide();
           if (onSuccessCallback) onSuccessCallback();
         } catch (error) {
-          alert("Erro ao banir usuário.");
+          console.log(error);
+          alert(error);
         }
       }
     });

@@ -107,10 +107,10 @@ export class UserService {
     };
   };
 
-  async banirUsuario(idUsuario, data) {
+  async banirUsuario(idUsuario, motivo) {
     return this.userRepo.update(idUsuario, {
       bannedAt: new Date(),
-      bannedReason: data.motivo,
+      bannedReason: motivo,
     });
   }
 

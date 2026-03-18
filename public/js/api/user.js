@@ -67,9 +67,28 @@ async function editUser({ id, email, telefone, tipo, nome }) {
 
     return data;
   } catch (error) {
-    const message = error.response?.data?.message || "Erro de conexão";;
+    const message = error.response?.data?.message || "Erro de conexão";
     throw new Error(message);
   }
 }
 
-export { getAllUsers, createUser, editUser };
+async function banirUser({ id, motivo }) {
+  try {
+    const { data } = await axios.put(
+      `/user/${id}/ban`,
+      {
+        motivo,
+      },
+      {
+        withCredentials: true,
+      },
+    );
+
+    return data;
+  } catch (error) {
+    const message = error.response?.data?.message || "Erro de conexão";
+    throw new Error(message);
+  }
+}
+
+export { getAllUsers, createUser, editUser, banirUser };
