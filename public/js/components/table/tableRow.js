@@ -135,3 +135,30 @@ export function createUserRow(user) {
     </tr>
   `;
 }
+
+export function createServiceRow(servico) {
+  const { id, nome, preco, duracaoMin } = servico;
+
+  const precoFormatado = Number(preco).toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+
+  return `
+    <tr>
+      <td class="ps-4">
+        <span class="fw-medium text-dark">${nome}</span>
+      </td>
+      
+      <td class="text-muted small">
+        <i class="bi bi-clock me-1"></i> ${duracaoMin} min
+      </td>
+      
+      <td class="fw-bold text-success">
+        ${precoFormatado}
+      </td>
+      
+   
+    </tr>
+  `;
+}

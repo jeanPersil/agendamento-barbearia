@@ -57,6 +57,53 @@
               <span>Novo Serviço</span>
             </button>
           </div>
+
+          <div class="card shadow-sm border-0 mb-4">
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead class="bg-light">
+                  <tr>
+                    <th
+                      class="ps-4 py-3 text-secondary text-uppercase small"
+                      style="width: 40%"
+                    >
+                      Serviço
+                    </th>
+
+                    <th
+                      class="py-3 text-secondary text-uppercase small"
+                      style="width: 20%"
+                    >
+                      Duração
+                    </th>
+
+                    <th
+                      class="py-3 text-secondary text-uppercase small"
+                      style="width: 20%"
+                    >
+                      Preço
+                    </th>
+                  </tr>
+                </thead>
+
+                <tbody id="tabela-servicos"></tbody>
+              </table>
+            </div>
+
+            <div
+              class="card-footer bg-white py-3 border-top-0 d-flex justify-content-between align-items-center"
+            >
+              <small class="text-muted" id="pagination-info"
+                >Carregando...</small
+              >
+              <nav>
+                <ul
+                  class="pagination pagination-sm mb-0"
+                  id="pagination-list"
+                ></ul>
+              </nav>
+            </div>
+          </div>
         </main>
       </div>
     </div>
