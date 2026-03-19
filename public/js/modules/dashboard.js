@@ -1,4 +1,4 @@
-import createStatCard from "../components/cards.js";
+import createStatCard from "../components/common/cards.js";
 import createAppointmentItem from "../components/itemAgendamento.js";
 import renderLayout from "../components/layout/renderLayout.js";
 
@@ -88,7 +88,6 @@ function renderTimeline() {
 }
 
 export default function startDashBoard() {
-  
   renderStats();
   renderTimeline();
   renderLayout({

@@ -1,4 +1,5 @@
-import { existeOuErro, igualOuErro } from "../utils/validator.js";
+import { existeOuErro } from "../utils/validator.js";
+import { handleError } from "../utils/errors.js";
 
 export class ServicoController {
   constructor(servicoService) {
@@ -18,10 +19,7 @@ export class ServicoController {
 
       return res.status(201).send();
     } catch (error) {
-      const status = error.statusCode || 500;
-      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
-      if (status === 500) console.error("ERRO 500:", error);
-      return res.status(status).send(msg);
+      handleError(res, error);
     }
   };
 
@@ -49,10 +47,7 @@ export class ServicoController {
 
       return res.status(200).send();
     } catch (error) {
-      const status = error.statusCode || 500;
-      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
-      if (status === 500) console.error("ERRO 500:", error);
-      return res.status(status).send(msg);
+      handleError(res, error);
     }
   };
 
@@ -63,7 +58,7 @@ export class ServicoController {
         data: data,
       });
     } catch (error) {
-      return res.status(500).send(error.message);
+      handleError(res, error);
     }
   };
 
@@ -76,10 +71,7 @@ export class ServicoController {
 
       return res.status(200).send();
     } catch (error) {
-      const status = error.statusCode || 500;
-      const msg = error.statusCode ? error.message : "Erro interno inesperado.";
-      if (status === 500) console.error("ERRO 500:", error);
-      return res.status(status).send(msg);
+      handleError(res, error);
     }
   };
 }

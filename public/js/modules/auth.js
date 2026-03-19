@@ -1,5 +1,5 @@
 import { login } from "../api/auth.js";
-import { renderAlert } from "../components/alert.js";
+import { renderAlert } from "../components/common/alert.js";
 
 function initLogin() {
   const form = document.getElementById("loginForm");
@@ -17,7 +17,7 @@ function initLogin() {
       window.localStorage.setItem("userId", data.user.id);
       window.localStorage.setItem("userEmail", data.user.email);
       window.localStorage.setItem("userName", data.user.name);
-      window.localStorage.setItem("userRole", data.user.role)
+      window.localStorage.setItem("userRole", data.user.role);
 
       window.location.href = data.user.page;
     } catch (error) {

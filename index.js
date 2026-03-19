@@ -16,4 +16,4 @@ app.use(pageRoutes);
 
 app.use(errorHandler);
 
-app.listen(3000, () => console.log("servidor rodando na porta 3000"));
+app.listen(3000, () => console.log(`Servidor rodando no link: http://localhost:3000/`));

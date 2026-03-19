@@ -1,18 +1,18 @@
 import renderLayout from "../components/layout/renderLayout.js";
-import createStatCard from "../components/cards.js";
-import { createUserRow } from "../components/tableRow.js";
+import createStatCard from "../components/common/cards.js";
+import { createUserRow } from "../components/table/tableRow.js";
 import { getAllUsers, createUser } from "../api/user.js";
-import { renderAlert } from "../components/alert.js";
-import { abrirModalDetalhesUsuario } from "../components/UserDetails.js";
+import { renderAlert } from "../components/common/alert.js";
+import { abrirModalDetalhesUsuario } from "../components/user/UserDetails.js";
 
-import { createPagination } from "../components/pagination.js";
+import { createPagination } from "../components/common/pagination.js";
 import {
   renderTableLoading,
   renderTableError,
   renderTableEmpty,
-} from "../components/tableHelper.js";
+} from "../components/table/tableHelper.js";
 
-import { openModalCreateUser } from "../components/modalCreateUser.js";
+import { openModalCreateUser } from "../components/user/modalCreateUser.js";
 
 const state = {
   users: [],
@@ -70,8 +70,6 @@ async function fetchData() {
       tipo: state.filters.tipo || undefined,
       status: state.filters.status || undefined,
     });
-
-    console.log(users);
 
     state.users = users;
     state.totalPages = meta.totalPages;

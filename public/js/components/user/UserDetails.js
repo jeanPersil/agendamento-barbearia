@@ -1,4 +1,4 @@
-import { editUser, banirUser } from "../api/user.js";
+import { editUser, banirUser } from "../../api/user.js";
 
 export function abrirModalDetalhesUsuario(user, onSuccessCallback) {
   // 1. Remove modal antigo
