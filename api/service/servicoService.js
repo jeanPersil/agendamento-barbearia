@@ -50,8 +50,40 @@ export class ServicoService {
     return this.servicoRepo.update(id, dadosParaAtualizar);
   }
 
-  async listarServicos() {
-    return this.servicoRepo.findAll();
+  async listarServicos({ page = 1, limit = 10 }) {
+    const skip = (Number(page) - 1) * Number(limit);
+    const take = Number(limit);
+
+    // CORREÇÃO: Declarar a variável 'where' vazia antes de montar as options
+    const where = {};
+
+    const options = {
+      where, // Agora o JS entende que isso é 'where: {}'
+      skip,
+      take,
+      select: {
+        id: true,
+        nome: true,
+        descricao: true,
+        preco: true,
+        duracaoMin: true,
+      },
+      orderBy: {
+        id: "desc",
+      },
+    };
+
+    const [servicos, total] = await Promise.all([
+      this.servicoRepo.findAll(options),
+      this.servicoRepo.count({ where }),
+    ]);
+
+    return {
+      servicos,
+      total,
+      totalPages: Math.ceil(total / take),
+      currentPage: Number(page),
+    };
   }
 
   async deletarServico(id) {

@@ -20,11 +20,16 @@ router.get("/user", userController.listarTodos);
 router.post("/user", auth, verificarAdmin, userController.registroPeloAdmin);
 router.put("/user/:id", auth, verificarAdmin, userController.editar);
 router.put("/user/:id/ban", auth, verificarAdmin, userController.banir);
-router.put("/user/:id/removeBan", auth, verificarAdmin, userController.removeBan);
+router.put(
+  "/user/:id/removeBan",
+  auth,
+  verificarAdmin,
+  userController.removeBan,
+);
 
 // Serviços
-router.get("/servico", auth, servicoController.listar);
-router.post("/servico", auth, verificarAdmin, servicoController.salvar);
+router.get("/servico", servicoController.listar);
+router.post("/servico", servicoController.salvar);
 router.put("/servico/:id", auth, verificarAdmin, servicoController.editar);
 router.delete("/servico/:id", auth, verificarAdmin, servicoController.deletar);
 

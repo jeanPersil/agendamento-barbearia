@@ -10,6 +10,10 @@ export class ServicosRepository extends IBaseRepository {
     return prisma.servico.findMany(options);
   }
 
+  async count(options = {}) {
+    return prisma.servico.count(options);
+  }
+
   async findById(id) {
     return prisma.servico.findUnique({ where: { id } });
   }

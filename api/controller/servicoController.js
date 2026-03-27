@@ -53,9 +53,19 @@ export class ServicoController {
 
   listar = async (req, res) => {
     try {
-      const data = await this.servicoService.listarServicos();
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const { servicos, total, totalPages } =
+        await this.servicoService.listarServicos({ page, limit });
       return res.status(200).json({
-        data: data,
+        data: servicos,
+        meta: {
+          totalItens: total,
+          totalPages: totalPages,
+          currentpage: page,
+          itemsForPage: limit,
+        },
       });
     } catch (error) {
       handleError(res, error);
