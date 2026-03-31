@@ -23,4 +23,8 @@ router.get("/servicos", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/servico.html"));
 });
 
+router.get("/agenda", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/agenda.html"));
+});
+
 export default router;

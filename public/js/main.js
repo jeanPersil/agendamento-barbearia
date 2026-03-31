@@ -1,24 +1,36 @@
 import { initLogin } from "./modules/auth.js";
 import startDashBoard from "./modules/dashboard.js";
 import startUser from "./modules/user.js";
+import initAgenda from "./modules/agenda.js";
 import { initServicos } from "./modules/servicos.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   const path = window.location.pathname;
 
-  if (path.includes("login")) {
-    initLogin();
-  }
+  switch (true) {
+    case path.includes("login"):
+      initLogin();
+      break;
 
-  if (path.includes("dashboard")) {
-    startDashBoard();
-  }
+    case path.includes("dashboard"):
+      startDashBoard();
+      break;
 
-  if (path.includes("usuarios")) {
-    startUser();
-  }
+    case path.includes("usuarios"):
+      startUser();
+      break;
 
-  if (path.includes("servicos")) {
-    initServicos();
+    case path.includes("servicos"):
+      initServicos();
+      break;
+
+    case path.includes("agenda"):
+      initAgenda();
+      break;
+
+    default:
+      // Opcional: O que fazer se não cair em nenhuma das rotas acima
+      // console.log("Rota não encontrada ou não mapeada");
+      break;
   }
 });
