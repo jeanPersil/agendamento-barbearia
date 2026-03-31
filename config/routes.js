@@ -16,7 +16,7 @@ router.post("/auth", authController.login);
 router.post("/auth/register", userController.registrar);
 
 // Usuários
-router.get("/user", userController.listarTodos);
+router.get("/user", auth, verificarAdmin, userController.listarTodos);
 router.post("/user", auth, verificarAdmin, userController.registroPeloAdmin);
 router.put("/user/:id", auth, verificarAdmin, userController.editar);
 router.put("/user/:id/ban", auth, verificarAdmin, userController.banir);
@@ -28,8 +28,8 @@ router.put(
 );
 
 // Serviços
-router.get("/servico", servicoController.listar);
-router.post("/servico", servicoController.salvar);
+router.get("/servico", auth, servicoController.listar);
+router.post("/servico", auth, verificarAdmin, servicoController.salvar);
 router.put("/servico/:id", auth, verificarAdmin, servicoController.editar);
 router.delete("/servico/:id", auth, verificarAdmin, servicoController.deletar);
 

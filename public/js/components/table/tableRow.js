@@ -137,28 +137,24 @@ export function createUserRow(user) {
 }
 
 export function createServiceRow(servico) {
-  const { id, nome, preco, duracaoMin } = servico;
-
-  const precoFormatado = Number(preco).toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL",
-  });
-
   return `
-    <tr>
-      <td class="ps-4">
-        <span class="fw-medium text-dark">${nome}</span>
-      </td>
+    <tr onclick="window.abrirDetalhesServico('${servico.id}')" style="cursor: pointer;" class="table-hover-row">
       
-      <td class="text-muted small">
-        <i class="bi bi-clock me-1"></i> ${duracaoMin} min
+      <td class="ps-4 py-3 align-middle">
+        <div class="fw-bold text-dark">${servico.nome}</div>
+        <div class="text-muted small text-truncate" style="max-width: 250px;">
+          ${servico.descricao}
+        </div>
       </td>
-      
-      <td class="fw-bold text-success">
-        ${precoFormatado}
+
+      <td class="py-3 align-middle text-secondary">
+        <i class="bi bi-clock me-1"></i> ${servico.duracaoMin} min
       </td>
-      
-   
+
+      <td class="py-3 align-middle fw-semibold text-success">
+        R$ ${Number(servico.preco).toFixed(2).replace(".", ",")}
+      </td>
+
     </tr>
   `;
 }

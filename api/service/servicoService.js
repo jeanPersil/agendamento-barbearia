@@ -54,11 +54,10 @@ export class ServicoService {
     const skip = (Number(page) - 1) * Number(limit);
     const take = Number(limit);
 
-    // CORREÇÃO: Declarar a variável 'where' vazia antes de montar as options
     const where = {};
 
     const options = {
-      where, // Agora o JS entende que isso é 'where: {}'
+      where,
       skip,
       take,
       select: {

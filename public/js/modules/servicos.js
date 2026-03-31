@@ -3,6 +3,7 @@ import { createServiceRow } from "../components/table/tableRow.js";
 import { getServices, createService } from "../api/servicos.js";
 import { openModalCreateService } from "../components/servico/modalCreateServico.js";
 import { renderAlert } from "../components/common/alert.js";
+import { abrirModalDetalhesServico } from "../components/servico/modalDetalheServico.js";
 
 import { createPagination } from "../components/common/pagination.js";
 import {
@@ -55,7 +56,6 @@ function updateTableUI() {
   const paginationList = document.getElementById("pagination-list");
   const infoText = document.getElementById("pagination-info");
 
-  // Renderiza a listagem de serviços
   if (state.servicos.length === 0) {
     renderTableEmpty("tabela-servicos", "Nenhum serviço encontrado.", 5);
   } else {
@@ -64,7 +64,6 @@ function updateTableUI() {
       .join("");
   }
 
-  // Atualiza o texto informativo "Mostrando X-Y de Z"
   const start = (state.currentPage - 1) * state.itemsPerPage + 1;
   const end = start + state.servicos.length - 1;
 
@@ -75,7 +74,6 @@ function updateTableUI() {
         : "Sem dados";
   }
 
-  // Renderiza os botões [Anterior] [1] [2] [Próxima]
   if (paginationList) {
     paginationList.innerHTML = createPagination({
       currentPage: state.currentPage,
@@ -95,7 +93,6 @@ window.mudarPaginaServicos = function (newPage) {
 export function modalCriarServico() {
   const buttonCreate = document.getElementById("buttonCreateService");
 
-  // Previne erro caso o botão não exista na tela
   if (!buttonCreate) return;
 
   buttonCreate.addEventListener("click", () => {
@@ -136,3 +133,14 @@ export function modalCriarServico() {
     });
   });
 }
+
+window.abrirDetalhesServico = function (id) {
+  const servico = state.servicos.find((s) => s.id === id);
+
+  if (!servico) {
+    console.error("Serviço não encontrado!");
+    return;
+  }
+
+  abrirModalDetalhesServico(servico, fetchData);
+};

@@ -75,6 +75,7 @@ export class ServicoController {
   deletar = async (req, res) => {
     const id = req.params.id;
 
+    console.log(id);
     try {
       existeOuErro(id, "É necessario o id do servico");
       await this.servicoService.deletarServico(id);
