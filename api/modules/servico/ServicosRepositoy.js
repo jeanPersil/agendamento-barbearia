@@ -1,5 +1,5 @@
-import prisma from "../prisma.js";
-import { IBaseRepository } from "./interface/IBaseRepository.js";
+import IBaseRepository from "../../interface/IBaseRepository.js";
+import prisma from "../../prisma.js";
 
 export class ServicosRepository extends IBaseRepository {
   async create(data) {

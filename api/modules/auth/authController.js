@@ -1,12 +1,11 @@
-import { existeOuErro } from "../utils/validator.js";
-import { asyncHandler } from "../utils/asyncHandler.js";
+import { existeOuErro } from "../../utils/validator.js";
 
 export class AuthController {
   constructor(authService) {
     this.authService = authService;
   }
 
-  login = asyncHandler(async (req, res) => {
+  login = async (req, res) => {
     const { email, senha } = req.body;
 
     existeOuErro(email, "O campo email é obrigatório");
@@ -34,5 +33,5 @@ export class AuthController {
         page: "/dashboard.html",
       },
     });
-  });
+  };
 }

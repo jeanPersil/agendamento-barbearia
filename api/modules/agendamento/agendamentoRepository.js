@@ -1,5 +1,5 @@
-import { IBaseRepository } from "./interface/IBaseRepository.js";
-import prisma from "../prisma.js";
+import IBaseRepository from "../../interface/IBaseRepository.js";
+import prisma from "../../prisma.js";
 
 export class AgendamentoRepository extends IBaseRepository {
   // --- MÉTODOS PADRÃO (CRUD) ---

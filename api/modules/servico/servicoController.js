@@ -1,5 +1,5 @@
-import { existeOuErro } from "../utils/validator.js";
-import { handleError } from "../utils/errors.js";
+import { existeOuErro } from "../../utils/validator.js";
+import { handleError } from "../../utils/errors.js";
 
 export class ServicoController {
   constructor(servicoService) {

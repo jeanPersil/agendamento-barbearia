@@ -8,7 +8,7 @@ function existeOuErro(valor, msg) {
     throw new ValidationError(msg);
 }
 
-function naoExisteOuErro(valor, msg) {
+function notExistOrError(valor, msg) {
   if (valor) throw new ValidationError(msg);
   if (Array.isArray(valor) && valor.length === 0)
     throw new ValidationError(msg);
@@ -20,4 +20,4 @@ function igualOuErro(valor1, valor2, msg) {
   if (valor1 !== valor2) throw new ValidationError(msg);
 }
 
-export { existeOuErro, naoExisteOuErro, igualOuErro };
+export { existeOuErro, notExistOrError, igualOuErro };

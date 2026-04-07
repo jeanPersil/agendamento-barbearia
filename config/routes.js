@@ -5,36 +5,17 @@ import {
   agendamentoController,
   authController,
 } from "../api/instances.js";
+
+import { userRoutes } from "../api/modules/user/userRoute.js";
+
 import passport from "../middlewares/passport.js";
 import { verificarAdmin } from "../middlewares/admin.js";
 
-const router = express.Router();
+const routes = express.Router();
 const auth = passport.authenticate();
 
-// Auth
-router.post("/auth", authController.login);
-router.post("/auth/register", userController.registrar);
-
 // Usuários
-router.get("/user", auth, verificarAdmin, userController.listarTodos);
-router.post("/user", auth, verificarAdmin, userController.registroPeloAdmin);
-router.put("/user/:id", auth, verificarAdmin, userController.editar);
-router.put("/user/:id/ban", auth, verificarAdmin, userController.banir);
-router.put(
-  "/user/:id/removeBan",
-  auth,
-  verificarAdmin,
-  userController.removeBan,
-);
+routes.use("/user", userRoutes);
 
-// Serviços
-router.get("/servico", auth, servicoController.listar);
-router.post("/servico", auth, verificarAdmin, servicoController.salvar);
-router.put("/servico/:id", auth, verificarAdmin, servicoController.editar);
-router.delete("/servico/:id", auth, verificarAdmin, servicoController.deletar);
 
-// Agendamentos
-router.post("/agendamento", auth, agendamentoController.criar);
-router.get("/agendamento", auth, agendamentoController.horariosDisponibilidade);
-
-export default router;
+export default routes;

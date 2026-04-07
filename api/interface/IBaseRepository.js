@@ -1,4 +1,4 @@
-export class IBaseRepository {
+export default class IBaseRepository {
   constructor() {
     if (this.constructor === IBaseRepository) {
       throw new Error(

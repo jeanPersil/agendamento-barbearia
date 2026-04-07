@@ -1,17 +1,25 @@
-import { UserRepository } from "./repositories/userRepository.js";
-import { UserService } from "./service/userService.js";
-import { UserController } from "./controller/userController.js";
+// --- IMPORTAÇÕES DO MÓDULO USER ---
+import { UserRepository } from "./modules/user/userRepository.js";
+import { UserService } from "./modules/user/userService.js";
+import { UserController } from "./modules/user/userController.js";
 
-import { ServicoController } from "./controller/servicoController.js";
-import { ServicosRepository } from "./repositories/ServicosRepositoy.js";
-import { ServicoService } from "./service/servicoService.js";
+// --- IMPORTAÇÕES DO MÓDULO SERVICO ---
+import { ServicoController } from "./modules/servico/servicoController.js";
+import { ServicosRepository } from "./modules/servico/ServicosRepositoy.js";
+import { ServicoService } from "./modules/servico/servicoService.js";
 
-import { AgendamentoRepository } from "./repositories/agendamentoRepository.js";
-import { AgendamentoService } from "./service/agendamentoService.js";
-import { AgendamentoController } from "./controller/agendamentoController.js";
+// --- IMPORTAÇÕES DO MÓDULO AGENDAMENTO ---
+import { AgendamentoRepository } from "./modules/agendamento/agendamentoRepository.js";
+import { AgendamentoService } from "./modules/agendamento/agendamentoService.js";
+import { AgendamentoController } from "./modules/agendamento/agendamentoController.js";
 
-import { AuthController } from "./controller/authController.js";
-import { AuthService } from "./service/authService.js";
+// --- IMPORTAÇÕES DO MÓDULO AUTH ---
+import { AuthController } from "./modules/auth/authController.js";
+import { AuthService } from "./modules/auth/authService.js";
+
+// ==========================================
+// INSTANCIAS
+// ==========================================
 
 // Instancia de usuario
 const userRepository = new UserRepository();
@@ -28,7 +36,7 @@ const agendamentoRepository = new AgendamentoRepository();
 const agendamentoService = new AgendamentoService(agendamentoRepository);
 const agendamentoController = new AgendamentoController(agendamentoService);
 
-//instancia de auth
+// Instancia de auth
 const authService = new AuthService(userRepository);
 const authController = new AuthController(authService);
 

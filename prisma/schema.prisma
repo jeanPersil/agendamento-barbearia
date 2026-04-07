@@ -10,105 +10,83 @@ datasource db {
 // ENUMS
 //////////////////////
 
-enum Role {
-  CLIENTE
-  PROFISSIONAL
-  ADMIN
+model Usuario {
+  id       Int    @id @default(autoincrement())
+  nome     String
+  email    String @unique
+  telefone    String
+  senha String
+  role     Int    @default(0) // 0: Cliente, 1: Admin
+
+  agendamentos Agendamento[]
+
+  @@map("usuarios")
 }
-
-enum StatusAgendamento {
-  AGENDADO
-  CONCLUIDO
-  CANCELADO
-  FALTOU
-}
-
-//////////////////////
-// USER
-//////////////////////
-
-model User {
-  id        String  @id @default(uuid())
-  nome      String
-  email     String  @unique
-  senha     String
-  telefone  String
-  imagemUrl String?
-  role      Role
-
-  bannedAt     DateTime?
-  bannedReason String?
-
-  // Relações
-  agendamentosComoCliente      Agendamento[] @relation("ClienteAgendamentos")
-  agendamentosComoProfissional Agendamento[] @relation("ProfissionalAgendamentos")
-
-  disponibilidades Disponibilidade[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-//////////////////////
-// SERVIÇOS
-//////////////////////
 
 model Servico {
-  id         String  @id @default(uuid())
-  nome       String  @unique
-  descricao  String
-  preco      Decimal
+  id         Int    @id @default(autoincrement())
+  nome       String @unique
+  preco      Float
   duracaoMin Int
 
   agendamentos Agendamento[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  @@map("servicos")
 }
 
-//////////////////////
-// AGENDAMENTOS
-//////////////////////
+model Expediente {
+  id         Int     @id @default(autoincrement())
+  diaSemana  Int // 0 (Dom) a 6 (Sab)
+  horaInicio String // "08:00"
+  horaFim    String // "19:00"
+  ativo      Boolean @default(true)
+
+  @@map("expediente")
+}
+
+model StatusAgendamento {
+  id           Int           @id @default(autoincrement())
+  nome         String        @unique
+  agendamentos Agendamento[]
+
+  @@map("status_agendamento")
+}
 
 model Agendamento {
-  id      String            @id @default(uuid())
-  data    DateTime
-  horario String
-  status  StatusAgendamento @default(AGENDADO)
+  id              Int      @id @default(autoincrement())
+  clienteId       Int
+  servicoId       Int
+  statusId        Int      @default(1)
+  dataServico     DateTime
+  horarioDeInicio String
+  horarioDeFim    String
+  createdAt       DateTime @default(now())
 
-  precoHistorico Decimal
+  cliente    Usuario           @relation(fields: [clienteId], references: [id])
+  servico    Servico           @relation(fields: [servicoId], references: [id])
+  status     StatusAgendamento @relation(fields: [statusId], references: [id])
+  pagamentos Pagamento[]
 
-  //////////////////////
-  // RELAÇÕES
-  //////////////////////
-  clienteId String
-  cliente   User   @relation("ClienteAgendamentos", fields: [clienteId], references: [id])
-
-  profissionalId String
-  profissional   User   @relation("ProfissionalAgendamentos", fields: [profissionalId], references: [id])
-
-  servicoId String
-  servico   Servico @relation(fields: [servicoId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // impede dois agendamentos no mesmo horário pro mesmo profissional
-  @@unique([profissionalId, data, horario])
+  @@map("agendamentos")
 }
 
-//////////////////////
-// DISPONIBILIDADE (agenda base)
-//////////////////////
+model MetodoPagamento {
+  id         Int         @id @default(autoincrement())
+  nome       String      @unique
+  pagamentos Pagamento[]
 
-model Disponibilidade {
-  id         Int    @id @default(autoincrement())
-  diaSemana  Int // 0=Dom, 1=Seg...
-  horaInicio String // "08:00"
-  horaFim    String // "18:00"
+  @@map("metodos_pagamento")
+}
 
-  profissionalId String
-  profissional   User   @relation(fields: [profissionalId], references: [id])
+model Pagamento {
+  id            Int       @id @default(autoincrement())
+  agendamentoId Int
+  metodoId      Int
+  valor         Float
+  pagoEm        DateTime? @default(now())
 
-  createdAt DateTime @default(now())
+  agendamento Agendamento     @relation(fields: [agendamentoId], references: [id])
+  metodo      MetodoPagamento @relation(fields: [metodoId], references: [id])
+
+  @@map("pagamentos")
 }

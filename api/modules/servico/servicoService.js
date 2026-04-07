@@ -1,4 +1,4 @@
-import { naoExisteOuErro, existeOuErro } from "../utils/validator.js";
+import { notExistOrError, existeOuErro } from "../../utils/validator.js";
 
 export class ServicoService {
   constructor(servicoRepository) {
@@ -10,7 +10,7 @@ export class ServicoService {
       nome: data.nome,
     });
 
-    naoExisteOuErro(
+    notExistOrError(
       servicoComMesmoNome,
       "Já existe um serviço cadastrado com este nome.",
     );
@@ -36,7 +36,7 @@ export class ServicoService {
       const servicoComMesmoNome = await this.servicoRepo.findOne({
         nome: data.nome,
       });
-      naoExisteOuErro(
+      notExistOrError(
         servicoComMesmoNome,
         "Já existe um serviço cadastrado com este nome.",
       );

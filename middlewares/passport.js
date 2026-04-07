@@ -1,6 +1,6 @@
 import passport from "passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { UserRepository } from "../api/repositories/userRepository.js";
+import { UserRepository } from "../api/modules/user/userRepository.js";
 
 const userRepository = new UserRepository();
 

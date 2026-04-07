@@ -1,7 +1,7 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import { existeOuErro } from "../utils/validator.js";
-import { ValidationError } from "../utils/errors.js";
+import { existeOuErro } from "../../utils/validator.js";
+import { ValidationError } from "../../utils/errors.js";
 import jwt from "jwt-simple";
 
 const authSecret = process.env.secret_key;

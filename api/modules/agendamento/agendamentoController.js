@@ -1,4 +1,4 @@
-import { existeOuErro } from "../utils/validator.js";
+import { existeOuErro } from "../../utils/validator.js";
 export class AgendamentoController {
   constructor(agendamentoService) {
     this.agenService = agendamentoService;
