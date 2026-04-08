@@ -1,4 +1,4 @@
-import { existeOuErro } from "../../utils/validator.js";
+import { existsOrError } from "../../utils/validator.js";
 export class AgendamentoController {
   constructor(agendamentoService) {
     this.agenService = agendamentoService;
@@ -8,15 +8,15 @@ export class AgendamentoController {
     const body = req.body;
 
     try {
-      existeOuErro(body.clienteId, "É necessario o id do cliente");
-      existeOuErro(body.profissionalId, "É necessario o id do profissional");
-      existeOuErro(body.servicoId, "É necessario o id do servico");
+      existsOrError(body.clienteId, "É necessario o id do cliente");
+      existsOrError(body.profissionalId, "É necessario o id do profissional");
+      existsOrError(body.servicoId, "É necessario o id do servico");
 
-      existeOuErro(
+      existsOrError(
         body.data,
         "É necessario a data do agendamento (AAAA-MM-DD)",
       );
-      existeOuErro(
+      existsOrError(
         body.horario,
         "É necessario o horário do agendamento (HH:mm)",
       );
@@ -38,8 +38,8 @@ export class AgendamentoController {
     const { profissionalId, data } = req.body;
 
     try {
-      existeOuErro(profissionalId, "É necessario o id do profissional");
-      existeOuErro(data, "É necessario a data do agendamento");
+      existsOrError(profissionalId, "É necessario o id do profissional");
+      existsOrError(data, "É necessario a data do agendamento");
       const horarios = await this.agenService.horariosLivres(
         profissionalId,
         data,

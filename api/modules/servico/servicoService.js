@@ -1,4 +1,4 @@
-import { notExistOrError, existeOuErro } from "../../utils/validator.js";
+import { notExistOrError, existsOrError } from "../../utils/validator.js";
 
 export class ServicoService {
   constructor(servicoRepository) {
@@ -28,7 +28,7 @@ export class ServicoService {
   async editarServico(id, data) {
     const servico = await this.servicoRepo.findOne({ id: id });
 
-    existeOuErro(servico, "Serviço não encontrado.");
+    existsOrError(servico, "Serviço não encontrado.");
 
     const dadosParaAtualizar = {};
 
@@ -87,7 +87,7 @@ export class ServicoService {
 
   async deletarServico(id) {
     const servico = await this.servicoRepo.findOne({ id: id });
-    existeOuErro(servico, "Serviço não encontrado.");
+    existsOrError(servico, "Serviço não encontrado.");
 
     return this.servicoRepo.delete(id);
   }

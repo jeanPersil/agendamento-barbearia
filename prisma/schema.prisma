@@ -6,87 +6,83 @@ datasource db {
   provider = "sqlite"
 }
 
-//////////////////////
-// ENUMS
-//////////////////////
-
-model Usuario {
+model User {
   id       Int    @id @default(autoincrement())
-  nome     String
+  name     String
   email    String @unique
-  telefone    String
-  senha String
-  role     Int    @default(0) // 0: Cliente, 1: Admin
+  phone    String
+  password String
+  role     Int    @default(0) // 0: Client, 1: Admin
 
-  agendamentos Agendamento[]
+  appointments Appointment[]
 
-  @@map("usuarios")
+  @@map("users")
 }
 
-model Servico {
-  id         Int    @id @default(autoincrement())
-  nome       String @unique
-  preco      Float
-  duracaoMin Int
+model Service {
+  id              Int    @id @default(autoincrement())
+  name            String @unique
+  price           Float
+  durationMinutes Int
 
-  agendamentos Agendamento[]
+  appointments Appointment[]
 
-  @@map("servicos")
+  @@map("services")
 }
 
-model Expediente {
-  id         Int     @id @default(autoincrement())
-  diaSemana  Int // 0 (Dom) a 6 (Sab)
-  horaInicio String // "08:00"
-  horaFim    String // "19:00"
-  ativo      Boolean @default(true)
+model Schedule {
+  id        Int     @id @default(autoincrement())
+  dayOfWeek Int // 0 (Sun) to 6 (Sat)
+  startTime String // "08:00"
+  endTime   String // "19:00"
+  isActive  Boolean @default(true)
 
-  @@map("expediente")
+  @@map("schedules")
 }
 
-model StatusAgendamento {
+model AppointmentStatus {
   id           Int           @id @default(autoincrement())
-  nome         String        @unique
-  agendamentos Agendamento[]
+  name         String        @unique
+  appointments Appointment[]
 
-  @@map("status_agendamento")
+  @@map("appointment_statuses")
 }
 
-model Agendamento {
+model Appointment {
   id              Int      @id @default(autoincrement())
-  clienteId       Int
-  servicoId       Int
+  clientId        Int
+  serviceId       Int
   statusId        Int      @default(1)
-  dataServico     DateTime
-  horarioDeInicio String
-  horarioDeFim    String
+  appointmentDate DateTime
+  startTime       String
+  endTime         String
   createdAt       DateTime @default(now())
 
-  cliente    Usuario           @relation(fields: [clienteId], references: [id])
-  servico    Servico           @relation(fields: [servicoId], references: [id])
-  status     StatusAgendamento @relation(fields: [statusId], references: [id])
-  pagamentos Pagamento[]
+  client   User              @relation(fields: [clientId], references: [id])
+  service  Service           @relation(fields: [serviceId], references: [id])
+  status   AppointmentStatus @relation(fields: [statusId], references: [id])
+  payments Payment[]
 
-  @@map("agendamentos")
+  @@map("appointments")
 }
 
-model MetodoPagamento {
-  id         Int         @id @default(autoincrement())
-  nome       String      @unique
-  pagamentos Pagamento[]
+model PaymentMethod {
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  payments Payment[]
 
-  @@map("metodos_pagamento")
+  @@map("payment_methods")
 }
 
-model Pagamento {
+model Payment {
   id            Int       @id @default(autoincrement())
-  agendamentoId Int
-  metodoId      Int
-  valor         Float
-  pagoEm        DateTime? @default(now())
+  appointmentId Int
+  methodId      Int
+  amount        Float
+  paidAt        DateTime? @default(now())
 
-  agendamento Agendamento     @relation(fields: [agendamentoId], references: [id])
-  metodo      MetodoPagamento @relation(fields: [metodoId], references: [id])
+  appointment Appointment   @relation(fields: [appointmentId], references: [id])
+  method      PaymentMethod @relation(fields: [methodId], references: [id])
 
-  @@map("pagamentos")
+  @@map("payments")
 }

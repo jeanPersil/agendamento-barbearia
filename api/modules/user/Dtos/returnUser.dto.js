@@ -1,10 +1,8 @@
 export class ReturnUserDTO {
-  
   constructor(user) {
     this.id = user.id;
-    this.name = user.nome;
+    this.name = user.name;
     this.email = user.email;
-    this.phone = user.telefone
+    this.phone = user.phone;
   }
-
 }

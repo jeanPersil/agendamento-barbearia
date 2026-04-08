@@ -1,4 +1,4 @@
-import { existeOuErro } from "../../utils/validator.js";
+import { existsOrError } from "../../utils/validator.js";
 import { ValidationError } from "../../utils/errors.js";
 import { gerarSlots, toHora, toMinutos } from "../../utils/helpers.js";
 
@@ -108,7 +108,7 @@ class AgendamentoService {
 
   alterarStatus = async (id, status) => {
     const agendamento = await this.agendamentoRepo.findById(id);
-    existeOuErro(agendamento, "Agendamento não encontrado");
+    existsOrError(agendamento, "Agendamento não encontrado");
 
     return await this.agendamentoRepo.update(id, { status });
   };

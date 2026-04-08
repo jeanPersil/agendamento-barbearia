@@ -1,4 +1,4 @@
-import { existeOuErro } from "../../utils/validator.js";
+import { existsOrError } from "../../utils/validator.js";
 
 export class AuthController {
   constructor(authService) {
@@ -8,8 +8,8 @@ export class AuthController {
   login = async (req, res) => {
     const { email, senha } = req.body;
 
-    existeOuErro(email, "O campo email é obrigatório");
-    existeOuErro(senha, "O campo senha é obrigatório");
+    existsOrError(email, "O campo email é obrigatório");
+    existsOrError(senha, "O campo senha é obrigatório");
 
     const resultado = await this.authService.login(email, senha);
 

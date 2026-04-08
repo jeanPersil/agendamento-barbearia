@@ -6,5 +6,7 @@ import validate from "../../../middlewares/validateDTO.js";
 const userRoutes = Router();
 
 userRoutes.post("/", validate(createUserSchema), userController.createUser);
+userRoutes.get("/", userController.getAllUsers);
+userRoutes.put("/:id", userController.updateUser);
 
 export { userRoutes };

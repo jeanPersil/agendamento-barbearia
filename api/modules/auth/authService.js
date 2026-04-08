@@ -1,6 +1,6 @@
 import "dotenv/config";
 import bcrypt from "bcrypt";
-import { existeOuErro } from "../../utils/validator.js";
+import { existsOrError } from "../../utils/validator.js";
 import { ValidationError } from "../../utils/errors.js";
 import jwt from "jwt-simple";
 
@@ -14,7 +14,7 @@ export class AuthService {
   async login(email, senha) {
     const user = await this.userRepo.findByEmail(email);
 
-    existeOuErro(user, "Usuário ou senha incorretos");
+    existsOrError(user, "Usuário ou senha incorretos");
 
     const senhaCorreta = await bcrypt.compare(senha, user.senha);
 

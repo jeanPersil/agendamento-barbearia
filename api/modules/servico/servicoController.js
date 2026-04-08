@@ -1,4 +1,4 @@
-import { existeOuErro } from "../../utils/validator.js";
+import { existsOrError } from "../../utils/validator.js";
 import { handleError } from "../../utils/errors.js";
 
 export class ServicoController {
@@ -10,10 +10,10 @@ export class ServicoController {
     const servicoData = req.body;
 
     try {
-      existeOuErro(servicoData.nome, "O campo nome é obrigatorio");
-      existeOuErro(servicoData.descricao, "O campo descricao é obrigatorio");
-      existeOuErro(servicoData.preco, "O campo preco é obrigatorio");
-      existeOuErro(servicoData.duracao, "O campo duracao é obrigatorio");
+      existsOrError(servicoData.nome, "O campo nome é obrigatorio");
+      existsOrError(servicoData.descricao, "O campo descricao é obrigatorio");
+      existsOrError(servicoData.preco, "O campo preco é obrigatorio");
+      existsOrError(servicoData.duracao, "O campo duracao é obrigatorio");
 
       await this.servicoService.criarServico(servicoData);
 
@@ -28,19 +28,19 @@ export class ServicoController {
     const servicoData = req.body;
     try {
       if (servicoData.nome !== undefined) {
-        existeOuErro(servicoData.nome, "Nome não pode ser vazio");
+        existsOrError(servicoData.nome, "Nome não pode ser vazio");
       }
 
       if (servicoData.descricao !== undefined) {
-        existeOuErro(servicoData.descricao, "Descricao não pode ser vazio");
+        existsOrError(servicoData.descricao, "Descricao não pode ser vazio");
       }
 
       if (servicoData.preco !== undefined) {
-        existeOuErro(servicoData.preco, "Preco não pode ser vazio");
+        existsOrError(servicoData.preco, "Preco não pode ser vazio");
       }
 
       if (servicoData.duracao !== undefined) {
-        existeOuErro(servicoData.duracao, "Duracao não pode ser vazio");
+        existsOrError(servicoData.duracao, "Duracao não pode ser vazio");
       }
 
       await this.servicoService.editarServico(id, servicoData);
@@ -77,7 +77,7 @@ export class ServicoController {
 
     console.log(id);
     try {
-      existeOuErro(id, "É necessario o id do servico");
+      existsOrError(id, "É necessario o id do servico");
       await this.servicoService.deletarServico(id);
 
       return res.status(200).send();
